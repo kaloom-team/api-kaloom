@@ -24,10 +24,15 @@ namespace KaloomAPI.Context
                 .HasOne(a => a.TipoAluno)
                 .WithMany()
                 .HasForeignKey(a => a.IdTipoAluno);
+                
+            modelBuilder.Entity<Etec>().ToTable("Etecs");
+            modelBuilder.Entity<Fatec>().ToTable("Fatecs");
         }
 
         public DbSet<Aluno> Alunos { get; set; }
         public DbSet<TipoAluno> TipoAlunos { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Etec> Etecs { get; set; }
+        public DbSet<Fatec> Fatecs { get; set; }
     }
 }

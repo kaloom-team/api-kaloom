@@ -3,10 +3,10 @@
     public class Aluno
     {
         public int Id { get; set; }
-        public string Nome { get; set; }
-        public string Sobrenome { get; set; }
-        public string NomeUsuario { get; set; }
-        public string FotoPerfil { get; set; }
+        public string Nome { get; set; } = string.Empty;
+        public string Sobrenome { get; set; } = string.Empty;
+        public string NomeUsuario { get; set; } = string.Empty;
+        public string FotoPerfil { get; set; } = string.Empty;
         public DateTime DataNascimento { get; set; }
         public DateTime DataCadastro { get; set; }
 
@@ -15,6 +15,5 @@
 
         public int IdTipoAluno { get; set; }
         public TipoAluno TipoAluno { get; set; }
-
     }
 }

@@ -1,0 +1,6 @@
+@KaloomAPI_HostAddress = http://localhost:5208
+
+GET {{KaloomAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using KaloomAPI.Context;
+using KaloomAPI.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Kaloom.API.Controllers
 {
@@ -13,12 +15,31 @@ namespace Kaloom.API.Controllers
             this._context = context;
         }
 
-        [HttpGet("getFatec")]
+        [HttpGet]
         public IActionResult Index()
         {
             var fatec = this._context.Fatecs;
 
             return Ok(fatec);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            var fatec = this._context.Fatecs.Find(id);
+
+            if (fatec == null)
+                return BadRequest();
+
+            return Ok(fatec);
+        }
+
+        [HttpPost]
+        public IActionResult AddFatecs(Fatec fatec)
+        {
+            _context.Add(fatec);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(GetById), new { id = fatec.Id }, fatec);
         }
     }
 }

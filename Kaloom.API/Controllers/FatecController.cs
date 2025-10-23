@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 namespace Kaloom.API.Controllers
 {
     [ApiController]
-    [Route("[Controller]")]
+    [Route("api/[Controller]")]
     public class FatecController : Controller
     {
         private readonly KaloomContext _context;

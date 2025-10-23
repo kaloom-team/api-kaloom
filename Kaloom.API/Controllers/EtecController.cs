@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kaloom.API.Controllers
 {
     [ApiController]
-    [Route("[Controller]")]
+    [Route("api/[Controller]")]
     public class EtecController : Controller
     {
         private readonly KaloomContext _context;

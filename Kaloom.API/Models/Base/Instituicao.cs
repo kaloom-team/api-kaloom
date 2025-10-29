@@ -1,4 +1,4 @@
-﻿namespace KaloomAPI.Models.Base
+﻿namespace Kaloom.API.Models.Base
 {
     public abstract class Instituicao
     {

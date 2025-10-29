@@ -1,5 +1,5 @@
-﻿using KaloomAPI.Context;
-using KaloomAPI.Models;
+﻿using Kaloom.API.Context;
+using Kaloom.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kaloom.API.Controllers

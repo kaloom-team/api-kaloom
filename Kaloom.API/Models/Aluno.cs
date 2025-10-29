@@ -1,4 +1,4 @@
-﻿namespace KaloomAPI.Models
+﻿namespace Kaloom.API.Models
 {
     public class Aluno
     {
@@ -7,8 +7,8 @@
         public string Sobrenome { get; set; } = string.Empty;
         public string NomeUsuario { get; set; } = string.Empty;
         public string FotoPerfil { get; set; } = string.Empty;
-        public DateTime DataNascimento { get; set; }
-        public DateTime DataCadastro { get; set; }
+        public DateOnly DataNascimento { get; set; }
+        public DateTime? DataCadastro { get; set; }
 
         public int IdUsuario { get; set; }
         public Usuario Usuario { get; set; }

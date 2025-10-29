@@ -4,6 +4,7 @@ using Kaloom.API.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kaloom.API.Migrations
 {
     [DbContext(typeof(KaloomContext))]
-    partial class KaloomContextModelSnapshot : ModelSnapshot
+    [Migration("20251029202340_UpdateStudentMigrations")]
+    partial class UpdateStudentMigrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,33 +86,6 @@ namespace Kaloom.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Etecs", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            NomeUnidade = "Etec JK - Sede"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            NomeUnidade = "Etec JK - Extensão Céu Caminho do Mar"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            NomeUnidade = "Etec JK - Extensão Associação Comunitária Despertar"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            NomeUnidade = "Etec Lauro Gomes"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            NomeUnidade = "Etec Jorge Street"
-                        });
                 });
 
             modelBuilder.Entity("Kaloom.API.Models.Fatec", b =>
@@ -127,23 +103,6 @@ namespace Kaloom.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Fatecs", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            NomeUnidade = "Fatec Diadema - \"Luigi Papaiz\""
-                        },
-                        new
-                        {
-                            Id = 2,
-                            NomeUnidade = "Fatec SBC - \"Adib Moisés Dib\""
-                        },
-                        new
-                        {
-                            Id = 3,
-                            NomeUnidade = "Fatec São Paulo"
-                        });
                 });
 
             modelBuilder.Entity("Kaloom.API.Models.TipoAluno", b =>

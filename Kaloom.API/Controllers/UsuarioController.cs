@@ -1,8 +1,10 @@
-﻿using KaloomAPI.Context;
+﻿using Kaloom.API.Context;
+using Kaloom.API.Models;
+using Kaloom.Communication.Requests;
+using Kaloom.Communication.Responses;
 using Microsoft.AspNetCore.Mvc;
-using KaloomAPI.Models;
 
-namespace KaloomAPI.Controllers
+namespace Kaloom.API.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
@@ -38,11 +40,25 @@ namespace KaloomAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Usuario usuario)
+        [ProducesResponseType(typeof(ResponseUserJson), StatusCodes.Status201Created)]
+        public IActionResult Create([FromBody] RequestUserJson request)
         {
+            var usuario = new Usuario
+            {
+                Email = request.Email,
+                Senha = request.Senha
+            };
+
             _context.Add(usuario);
             _context.SaveChanges();
-            return CreatedAtAction(nameof(GetById), new { id = usuario.Id }, usuario);
+
+            var response = new ResponseUserJson
+            {
+                Id = usuario.Id,
+                Email = usuario.Email
+            };
+
+            return CreatedAtAction(nameof(GetById), new { id = usuario.Id }, response);
         }
     }
 }

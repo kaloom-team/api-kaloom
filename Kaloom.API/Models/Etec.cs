@@ -1,6 +1,6 @@
-﻿using KaloomAPI.Models.Base;
+﻿using Kaloom.API.Models.Base;
 
-namespace KaloomAPI.Models
+namespace Kaloom.API.Models
 {
     public class Etec : Instituicao
     {

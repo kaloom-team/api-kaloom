@@ -1,4 +1,4 @@
-using KaloomAPI.Context;
+using Kaloom.API.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;

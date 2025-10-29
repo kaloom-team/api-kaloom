@@ -1,4 +1,4 @@
-﻿namespace KaloomAPI.Models
+﻿namespace Kaloom.API.Models
 {
     public class Usuario
     {

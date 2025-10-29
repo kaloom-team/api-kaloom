@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace KaloomAPI.Migrations
+namespace Kaloom.API.Migrations
 {
     /// <inheritdoc />
     public partial class AddEtecFatecModels : Migration

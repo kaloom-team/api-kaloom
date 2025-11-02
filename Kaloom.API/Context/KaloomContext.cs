@@ -18,13 +18,15 @@ namespace Kaloom.API.Context
             modelBuilder.Entity<Aluno>()
                 .HasOne(a => a.Usuario)
                 .WithOne(u => u.Aluno)
-                .HasForeignKey<Aluno>(a => a.IdUsuario);
+                .HasForeignKey<Aluno>(a => a.IdUsuario)
+                .IsRequired();
 
             modelBuilder.Entity<Aluno>()
                 .HasOne(a => a.TipoAluno)
                 .WithMany()
-                .HasForeignKey(a => a.IdTipoAluno);
-                
+                .HasForeignKey(a => a.IdTipoAluno)
+                .IsRequired();
+
             modelBuilder.Entity<Etec>().ToTable("Etecs");
             modelBuilder.Entity<Fatec>().ToTable("Fatecs");
 

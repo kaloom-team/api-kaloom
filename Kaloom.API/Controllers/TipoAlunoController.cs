@@ -26,9 +26,10 @@ namespace Kaloom.API.Controllers
 
         [HttpGet]
         [Route("{id}")]
+        [ProducesResponseType(typeof(TipoAluno), StatusCodes.Status200OK)]
         public IActionResult GetById([FromRoute] int id)
         {
-            var tipo = this._context.Alunos.Find(id);
+            var tipo = this._context.TipoAlunos.Find(id);
 
             if (tipo == null)
             {
@@ -41,7 +42,7 @@ namespace Kaloom.API.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] TipoAluno tipo)
         {
-            _context.Add(tipo);
+            _context.TipoAlunos.Add(tipo);
             _context.SaveChanges();
             return CreatedAtAction(nameof(GetById), new { id = tipo.Id }, tipo);
         }

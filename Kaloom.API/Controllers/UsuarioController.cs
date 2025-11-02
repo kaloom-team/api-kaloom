@@ -3,6 +3,7 @@ using Kaloom.API.Models;
 using Kaloom.Communication.Requests;
 using Kaloom.Communication.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Kaloom.API.Controllers
 {
@@ -18,18 +19,18 @@ namespace Kaloom.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAllAsync()
         {
-            var usuarios = this._context.Usuarios;
+            var usuarios = await this._context.Usuarios.ToListAsync();
 
             return Ok(usuarios);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult GetById([FromRoute] int id)
+        public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
-            var usuarios = this._context.Alunos.Find(id);
+            var usuarios = await this._context.Alunos.FindAsync(id);
 
             if (usuarios == null)
             {
@@ -41,7 +42,7 @@ namespace Kaloom.API.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(ResponseUserJson), StatusCodes.Status201Created)]
-        public IActionResult Create([FromBody] RequestUserJson request)
+        public async Task<IActionResult> CreateAsync([FromBody] RequestUserJson request)
         {
             var usuario = new Usuario
             {
@@ -49,8 +50,8 @@ namespace Kaloom.API.Controllers
                 Senha = request.Senha
             };
 
-            _context.Add(usuario);
-            _context.SaveChanges();
+            await _context.AddAsync(usuario);
+            await _context.SaveChangesAsync();
 
             var response = new ResponseUserJson
             {
@@ -58,7 +59,33 @@ namespace Kaloom.API.Controllers
                 Email = usuario.Email
             };
 
-            return CreatedAtAction(nameof(GetById), new { id = usuario.Id }, response);
+            return CreatedAtAction(nameof(GetByIdAsync), new { id = usuario.Id }, response);
+        }
+
+        [HttpPost]
+        [Route("Login")]
+        [ProducesResponseType(typeof(ResponseUserLoginJson), StatusCodes.Status200OK)]
+        public async Task<IActionResult> LoginAsync([FromBody] RequestUserLoginJson request)
+        {
+            var usuarios = await this._context.Usuarios
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Email == request.Email);
+
+            if (usuarios == null)
+                return Unauthorized(new { message = "Usuário não encontrado." });
+
+            if (usuarios.Senha != request.Senha)
+                return Unauthorized(new { message = "Senha incorreta." });
+
+            var aluno = await this._context.Alunos
+                .AsNoTracking()
+                .Include(u => u.TipoAluno)
+                .FirstOrDefaultAsync(a => a.IdUsuario == usuarios.Id);
+
+            if (aluno == null)
+                return NotFound(new { message = "Aluno não encontrado para este usuário." });
+
+            return Ok(new ResponseUserLoginJson("Login realizado com sucesso!", aluno));
         }
     }
 }

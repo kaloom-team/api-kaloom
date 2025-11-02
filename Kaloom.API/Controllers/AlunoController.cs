@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Kaloom.API.Models;
 using Kaloom.Communication.Responses;
 using Kaloom.Communication.Requests;
+using Microsoft.EntityFrameworkCore;
 
 namespace Kaloom.API.Controllers
 {
@@ -18,9 +19,12 @@ namespace Kaloom.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var alunos = this._context.Alunos;
+            var alunos = await this._context.Alunos
+                .Include(u => u.Usuario)
+                .Include(u => u.TipoAluno)
+                .ToListAsync();
 
             return Ok(alunos);
         }
@@ -29,7 +33,11 @@ namespace Kaloom.API.Controllers
         [Route("{id}")]
         public IActionResult GetById([FromRoute] int id)
         {
-            var alunos = this._context.Alunos.Find(id);
+            var alunos = this._context.Alunos
+                .Include(u => u.Usuario)
+                .Include(u => u.TipoAluno)
+                .ToList()
+                .Where(a => a.Id == id);
             
             if (alunos == null)
             {

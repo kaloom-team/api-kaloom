@@ -2,6 +2,7 @@
 using Kaloom.API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Kaloom.API.Controllers
 {
@@ -17,34 +18,47 @@ namespace Kaloom.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        [ProducesResponseType<List<TipoAluno>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAllAsync()
         {
-            var tipo = this._context.TipoAlunos;
+            var tipo = await _context.TipoAlunos
+                .AsNoTracking()
+                .ToListAsync();
+
+            if (tipo == null || tipo.Count == 0)
+                return NotFound();
 
             return Ok(tipo);
         }
 
-        [HttpGet]
-        [Route("{id}")]
-        [ProducesResponseType(typeof(TipoAluno), StatusCodes.Status200OK)]
-        public IActionResult GetById([FromRoute] int id)
+        [HttpGet("{id}", Name = "GetStudentTypeById")]
+        [ProducesResponseType<TipoAluno>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
-            var tipo = this._context.TipoAlunos.Find(id);
+            var tipo = await this._context.TipoAlunos
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.Id == id);
 
             if (tipo == null)
-            {
-                return NotFound();
-            }
+                return NotFound(new { message = $"Nenhum tipo de aluno encontrado com o ID {id}." });
 
             return Ok(tipo);
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] TipoAluno tipo)
+        [ProducesResponseType<TipoAluno>(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateAsync([FromBody] TipoAluno tipo)
         {
-            _context.TipoAlunos.Add(tipo);
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(GetById), new { id = tipo.Id }, tipo);
+            await _context.TipoAlunos.AddAsync(tipo);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtRoute("GetStudentTypeById", new { id = tipo.Id }, tipo);
         }
     }
 }

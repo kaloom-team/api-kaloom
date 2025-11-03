@@ -1,6 +1,7 @@
 ﻿using Kaloom.API.Context;
 using Kaloom.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Kaloom.API.Controllers
 {
@@ -15,30 +16,50 @@ namespace Kaloom.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        [ProducesResponseType<List<Etec>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAllAsync()
         {
-            var etec = this._context.Etecs;
+            var etecs = await this._context.Etecs
+                .AsNoTracking()
+                .ToListAsync();
 
-            return Ok(etec);
+            if (etecs == null || etecs.Count == 0)
+                return NotFound();
+
+            return Ok(etecs);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        [HttpGet("{id}", Name = "GetEtecById")]
+        [ProducesResponseType<Etec>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
-            var etec = this._context.Etecs.Find(id);
+            var etec = await this._context.Etecs
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == id);
 
             if (etec == null)
-                return BadRequest();
+                return NotFound(new { message = $"Nenhuma Etec encontrada com o ID {id}." });
 
             return Ok(etec);
         }
 
         [HttpPost]
-        public IActionResult AddEtecs(Etec etec)
+        [ProducesResponseType<Etec>(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateAsync([FromBody] Etec etec)
         {
-            _context.Add(etec);
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(GetById), new { id = etec.Id }, etec);
+            if (string.IsNullOrWhiteSpace(etec.NomeUnidade))
+                return BadRequest(new { message = "O nome da unidade não pode ser vazio ou ter espaços em branco" });
+
+            await _context.AddAsync(etec);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtRoute("GetEtecById", new { id = etec.Id }, etec);
         }
     }
 }

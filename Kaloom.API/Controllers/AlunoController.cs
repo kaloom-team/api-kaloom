@@ -1,8 +1,8 @@
 ﻿using Kaloom.API.Context;
-using Microsoft.AspNetCore.Mvc;
 using Kaloom.API.Models;
-using Kaloom.Communication.Responses;
 using Kaloom.Communication.Requests;
+using Kaloom.Communication.Responses;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kaloom.API.Controllers
@@ -19,38 +19,59 @@ namespace Kaloom.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [ProducesResponseType<List<Aluno>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAllAsync()
         {
             var alunos = await this._context.Alunos
                 .Include(u => u.Usuario)
                 .Include(u => u.TipoAluno)
+                .AsNoTracking()
                 .ToListAsync();
+
+            if(alunos == null || alunos.Count == 0)
+                return NotFound();
 
             return Ok(alunos);
         }
 
-        [HttpGet]
-        [Route("{id}")]
-        public IActionResult GetById([FromRoute] int id)
+        [HttpGet("{id}", Name = "GetStudentById")]
+        [ProducesResponseType<Aluno>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
-            var alunos = this._context.Alunos
+            var alunos = await this._context.Alunos
                 .Include(u => u.Usuario)
                 .Include(u => u.TipoAluno)
-                .ToList()
-                .Where(a => a.Id == id);
+                .AsNoTracking()
+                .FirstOrDefaultAsync(a => a.Id == id);
             
             if (alunos == null)
             {
-                return NotFound();
+                return NotFound(new { message = $"Nenhum aluno encontrado com o ID {id}." });
             }
 
             return Ok(alunos);
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ResponseStudentJson), StatusCodes.Status201Created)]
-        public IActionResult Create([FromBody] RequestStudentJson request)
+        [ProducesResponseType<ResponseStudentJson>(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateAsync([FromBody] RequestStudentJson request)
         {
+            if 
+            (
+                string.IsNullOrWhiteSpace(request.Nome) || 
+                string.IsNullOrWhiteSpace(request.Sobrenome) || 
+                string.IsNullOrWhiteSpace(request.NomeUsuario)
+            )
+            {
+                return BadRequest(new { message = "Os campos de texto não podem ser vazios ou conter apenas espaços." });
+            }
+
             var aluno = new Aluno
             {
                 Nome = request.Nome,
@@ -62,8 +83,8 @@ namespace Kaloom.API.Controllers
                 IdTipoAluno = request.IdTipoAluno
             };
 
-            _context.Add(aluno);
-            _context.SaveChanges();
+            await _context.AddAsync(aluno);
+            await _context.SaveChangesAsync();
 
             var response = new ResponseStudentJson
             {
@@ -71,7 +92,7 @@ namespace Kaloom.API.Controllers
                 Nome = aluno.Nome
             };
 
-            return CreatedAtAction(nameof(GetById), new { id = aluno.Id }, response);
+            return CreatedAtRoute("GetStudentById", new { id = aluno.Id }, response);
         }
     }
 }

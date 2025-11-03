@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Kaloom.API.Context;
+﻿using Kaloom.API.Context;
 using Kaloom.API.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Kaloom.Communication.Responses;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Kaloom.API.Controllers
 {
@@ -16,30 +17,50 @@ namespace Kaloom.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        [ProducesResponseType<List<Fatec>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAllAsync()
         {
-            var fatec = this._context.Fatecs;
+            var fatecs = await this._context.Fatecs
+                .AsNoTracking()
+                .ToListAsync();
 
-            return Ok(fatec);
+            if (fatecs == null || fatecs.Count == 0)
+                return NotFound();
+
+            return Ok(fatecs);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        [HttpGet("{id}", Name = "GetFatecById")]
+        [ProducesResponseType<Fatec>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
-            var fatec = this._context.Fatecs.Find(id);
+            var fatec = await this._context.Fatecs
+                .AsNoTracking()
+                .FirstOrDefaultAsync(f => f.Id == id);
 
             if (fatec == null)
-                return BadRequest();
+                return NotFound(new { message = $"Nenhuma Fatec encontrada com o ID {id}." });
 
             return Ok(fatec);
         }
 
         [HttpPost]
-        public IActionResult AddFatecs(Fatec fatec)
+        [ProducesResponseType<Fatec>(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateAsync([FromBody] Fatec fatec)
         {
-            _context.Add(fatec);
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(GetById), new { id = fatec.Id }, fatec);
+            if(string.IsNullOrWhiteSpace(fatec.NomeUnidade))
+                return BadRequest(new { message = "O nome da unidade não pode ser vazio ou ter espaços em branco" });
+
+            await _context.AddAsync(fatec);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtRoute("GetFatecById", new { id = fatec.Id }, fatec);
         }
     }
 }

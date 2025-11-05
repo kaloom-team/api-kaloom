@@ -1,6 +1,5 @@
 ﻿using Kaloom.API.Context;
 using Kaloom.API.Models;
-using Kaloom.Communication.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,7 +25,7 @@ namespace Kaloom.API.Controllers
                 .AsNoTracking()
                 .ToListAsync();
 
-            if (fatecs == null || fatecs.Count == 0)
+            if (fatecs.Count == 0)
                 return NotFound();
 
             return Ok(fatecs);

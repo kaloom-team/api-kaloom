@@ -1,6 +1,6 @@
-﻿namespace Kaloom.Communication.Responses
+﻿namespace Kaloom.Communication.DTOs.Responses
 {
-    public class ResponseUserJson
+    public class UserResponse
     {
         public int Id { get; set; }
         public string Email { get; set; } = string.Empty;

@@ -1,9 +1,11 @@
 ﻿using Kaloom.API.Context;
 using Kaloom.API.Models;
-using Kaloom.Communication.Requests;
-using Kaloom.Communication.Responses;
+using Kaloom.Communication.DTOs.Requests;
+using Kaloom.Communication.DTOs.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Kaloom.API.UseCases.Students.Register;
+using Kaloom.API.Factories;
 
 namespace Kaloom.API.Controllers
 {
@@ -12,10 +14,12 @@ namespace Kaloom.API.Controllers
     public class AlunoController : ControllerBase
     {
         private readonly KaloomContext _context;
+        private readonly IRegisterStudentsUseCase _registerStudentsUseCase;
 
-        public AlunoController(KaloomContext context)
+        public AlunoController(KaloomContext context, IRegisterStudentsUseCase registerStudentsUseCase)
         {
             this._context = context;
+            this._registerStudentsUseCase = registerStudentsUseCase;
         }
 
         [HttpGet]
@@ -30,7 +34,7 @@ namespace Kaloom.API.Controllers
                 .AsNoTracking()
                 .ToListAsync();
 
-            if(alunos == null || alunos.Count == 0)
+            if(alunos.Count == 0)
                 return NotFound();
 
             return Ok(alunos);
@@ -57,42 +61,14 @@ namespace Kaloom.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType<ResponseStudentJson>(StatusCodes.Status201Created)]
+        [ProducesResponseType<StudentResponse>(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateAsync([FromBody] RequestStudentJson request)
+        public async Task<IActionResult> CreateAsync([FromBody] StudentRequest request)
         {
-            if 
-            (
-                string.IsNullOrWhiteSpace(request.Nome) || 
-                string.IsNullOrWhiteSpace(request.Sobrenome) || 
-                string.IsNullOrWhiteSpace(request.NomeUsuario)
-            )
-            {
-                return BadRequest(new { message = "Os campos de texto não podem ser vazios ou conter apenas espaços." });
-            }
+            var response = await this._registerStudentsUseCase.ExecuteAsync(request);
 
-            var aluno = new Aluno
-            {
-                Nome = request.Nome,
-                Sobrenome = request.Sobrenome,
-                NomeUsuario = request.NomeUsuario,
-                DataNascimento = DateOnly.FromDateTime(request.DataNascimento),
-                DataCadastro = DateTime.Now,
-                IdUsuario = request.IdUsuario,
-                IdTipoAluno = request.IdTipoAluno
-            };
-
-            await _context.AddAsync(aluno);
-            await _context.SaveChangesAsync();
-
-            var response = new ResponseStudentJson
-            {
-                Id = aluno.Id,
-                Nome = aluno.Nome
-            };
-
-            return CreatedAtRoute("GetStudentById", new { id = aluno.Id }, response);
+            return CreatedAtRoute("GetStudentById", new { id = response.Id }, response);
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿namespace Kaloom.Communication.Requests
+﻿namespace Kaloom.Communication.DTOs.Requests
 {
-    public class RequestStudentJson
+    public class StudentRequest
     {
         public string Nome { get; set; } = string.Empty;
         public string Sobrenome { get; set; } = string.Empty;
         public string NomeUsuario { get; set; } = string.Empty;
-        public DateTime DataNascimento { get; set; }
+        public DateOnly DataNascimento { get; set; }
         public int IdUsuario { get; set; }
         public int IdTipoAluno { get; set; }
     }

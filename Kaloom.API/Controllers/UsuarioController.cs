@@ -1,7 +1,7 @@
 ﻿using Kaloom.API.Context;
 using Kaloom.API.Models;
-using Kaloom.Communication.Requests;
-using Kaloom.Communication.Responses;
+using Kaloom.Communication.DTOs.Requests;
+using Kaloom.Communication.DTOs.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +28,7 @@ namespace Kaloom.API.Controllers
                 .AsNoTracking()
                 .ToListAsync();
 
-            if(usuarios == null || usuarios.Count == 0)
+            if(usuarios.Count == 0)
                 return NotFound();
 
             return Ok(usuarios);
@@ -53,10 +53,10 @@ namespace Kaloom.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType<ResponseUserJson>(StatusCodes.Status201Created)]
+        [ProducesResponseType<UserResponse>(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateAsync([FromBody] RequestUserJson request)
+        public async Task<IActionResult> CreateAsync([FromBody] UserRequest request)
         {
             var usuario = new Usuario
             {
@@ -67,7 +67,7 @@ namespace Kaloom.API.Controllers
             await _context.AddAsync(usuario);
             await _context.SaveChangesAsync();
 
-            var response = new ResponseUserJson
+            var response = new UserResponse
             {
                 Id = usuario.Id,
                 Email = usuario.Email
@@ -77,11 +77,11 @@ namespace Kaloom.API.Controllers
         }
 
         [HttpPost("Login")]
-        [ProducesResponseType<ResponseUserLoginJson>(StatusCodes.Status200OK)]
+        [ProducesResponseType<UserLoginResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> LoginAsync([FromBody] RequestUserLoginJson request)
+        public async Task<IActionResult> LoginAsync([FromBody] UserLoginRequest request)
         {
             var usuarios = await this._context.Usuarios
                 .AsNoTracking()
@@ -101,7 +101,7 @@ namespace Kaloom.API.Controllers
             if (aluno == null)
                 return NotFound(new { message = "Aluno não encontrado para este usuário." });
 
-            return Ok(new ResponseUserLoginJson("Login realizado com sucesso!", aluno));
+            return Ok(new UserLoginResponse("Login realizado com sucesso!", aluno));
         }
     }
 }

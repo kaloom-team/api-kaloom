@@ -1,11 +1,11 @@
-﻿namespace Kaloom.Communication.Responses
+﻿namespace Kaloom.Communication.DTOs.Responses
 {
-    public class ResponseUserLoginJson
+    public class UserLoginResponse
     {
         public string Message { get; set; } = string.Empty;
         public object? Aluno { get; set; }
 
-        public ResponseUserLoginJson(string msg, object? aluno)
+        public UserLoginResponse(string msg, object? aluno)
         {
             this.Message = msg;
             this.Aluno = aluno;

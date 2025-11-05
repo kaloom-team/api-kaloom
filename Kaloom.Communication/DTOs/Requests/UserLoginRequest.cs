@@ -1,6 +1,6 @@
-﻿namespace Kaloom.Communication.Requests
+﻿namespace Kaloom.Communication.DTOs.Requests
 {
-    public class RequestUserLoginJson
+    public class UserLoginRequest
     {
         public string Email { get; set; } = string.Empty;
         public string Senha { get; set; } = string.Empty;

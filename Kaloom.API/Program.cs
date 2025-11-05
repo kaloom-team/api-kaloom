@@ -1,5 +1,7 @@
 using Kaloom.API.Context;
 using Microsoft.EntityFrameworkCore;
+using Kaloom.API.UseCases.Students.Register;
+using Kaloom.API.Factories;
 using Microsoft.Extensions.Configuration;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
@@ -26,6 +28,8 @@ builder.Services.AddDbContext<KaloomContext>(options =>
 
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IRegisterStudentsUseCase, RegisterStudentsUseCase>();
+builder.Services.AddScoped<IStudentFactory, StudentFactory>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

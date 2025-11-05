@@ -25,7 +25,7 @@ namespace Kaloom.API.Controllers
                 .AsNoTracking()
                 .ToListAsync();
 
-            if (etecs == null || etecs.Count == 0)
+            if (etecs.Count == 0)
                 return NotFound();
 
             return Ok(etecs);

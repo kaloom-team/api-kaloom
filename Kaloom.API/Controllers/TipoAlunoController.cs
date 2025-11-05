@@ -27,7 +27,7 @@ namespace Kaloom.API.Controllers
                 .AsNoTracking()
                 .ToListAsync();
 
-            if (tipo == null || tipo.Count == 0)
+            if (tipo.Count == 0)
                 return NotFound();
 
             return Ok(tipo);

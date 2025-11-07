@@ -1,0 +1,22 @@
+using Kaloom.API.Context;
+using Kaloom.Exceptions.ExceptionsBase;
+
+namespace Kaloom.API.UseCases.Students.Delete
+{
+    public class DeleteStudentUseCase : IDeleteStudentUseCase
+    {
+        private readonly KaloomContext _context;
+        public DeleteStudentUseCase(KaloomContext context)
+        {
+            this._context = context;
+        }
+
+        public async Task ExecuteAsync(int id)
+        {
+            var aluno = await this._context.Alunos.FindAsync(id) ?? throw new NotFoundException("Aluno não encontrado.");
+
+            this._context.Alunos.Remove(aluno);
+            await this._context.SaveChangesAsync();
+        }
+    }
+}

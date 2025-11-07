@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Kaloom.API.UseCases.Students.Register;
 using Kaloom.API.UseCases.Students.GetAll;
 using Kaloom.API.UseCases.Students.GetById;
+using Kaloom.API.UseCases.Students.Delete;
+using Kaloom.API.UseCases.Students.Update;
 
 namespace Kaloom.API.Controllers
 {
@@ -18,25 +20,29 @@ namespace Kaloom.API.Controllers
         private readonly IRegisterStudentsUseCase _registerStudentsUseCase;
         private readonly IGetAllStudentsUseCase _getAllStudentsUseCase;
         private readonly IGetStudentByIdUseCase _getStudentByIdUseCase;
+        private readonly IDeleteStudentUseCase _deleteStudentUseCase;
+        private readonly IUpdateStudentUseCase _updateStudentUseCase;
 
-        public AlunoController(KaloomContext context, IRegisterStudentsUseCase registerStudentsUseCase, IGetAllStudentsUseCase getAllStudentsUseCase, IGetStudentByIdUseCase getStudentByIdUseCase)
+        public AlunoController(KaloomContext context, IRegisterStudentsUseCase registerStudentsUseCase, IGetAllStudentsUseCase getAllStudentsUseCase, IGetStudentByIdUseCase getStudentByIdUseCase, IDeleteStudentUseCase deleteStudentUseCase, IUpdateStudentUseCase updateStudentUseCase)
         {
             this._context = context;
             this._registerStudentsUseCase = registerStudentsUseCase;
             this._getAllStudentsUseCase = getAllStudentsUseCase;
             this._getStudentByIdUseCase = getStudentByIdUseCase;
+            this._deleteStudentUseCase = deleteStudentUseCase;
+            this._updateStudentUseCase = updateStudentUseCase;
         }
 
         [HttpGet]
-        [ProducesResponseType<List<Aluno>>(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType<IEnumerable<Aluno>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllAsync()
         {
             var alunos = await this._getAllStudentsUseCase.ExecuteAsync();
 
             if(alunos.Count == 0)
-                return NotFound();
+                return NoContent();
 
             return Ok(alunos);
         }
@@ -48,11 +54,6 @@ namespace Kaloom.API.Controllers
         public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
             var aluno = await _getStudentByIdUseCase.ExecuteAsync(id);
-            
-            if (aluno == null)
-            {
-                return NotFound(new { message = $"Nenhum aluno encontrado com o ID {id}." });
-            }
 
             return Ok(aluno);
         }
@@ -66,6 +67,26 @@ namespace Kaloom.API.Controllers
             var response = await this._registerStudentsUseCase.ExecuteAsync(request);
 
             return CreatedAtRoute("GetStudentById", new { id = response.Id }, response);
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] StudentRequest request)
+        {
+            await this._updateStudentUseCase.ExecuteAsync(id, request);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteAsync([FromRoute] int id)
+        {
+            await this._deleteStudentUseCase.ExecuteAsync(id);
+            return NoContent();
         }
     }
 }

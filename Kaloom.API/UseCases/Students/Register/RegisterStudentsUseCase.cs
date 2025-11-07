@@ -6,9 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Kaloom.API.Context;
 using Kaloom.Communication.DTOs.Responses;
 using Kaloom.Communication.DTOs.Requests;
-using Kaloom.API.UseCases.Students.SharedValidator;
 using Kaloom.API.Factories;
-using Kaloom.Exceptions.ExceptionsBase;
+using Kaloom.API.UseCases.Students.Utils;
 
 namespace Kaloom.API.UseCases.Students.Register
 {
@@ -25,7 +24,7 @@ namespace Kaloom.API.UseCases.Students.Register
 
         public async Task<StudentResponse> ExecuteAsync(StudentRequest request)
         {
-            Validate(request);
+            StudentValidate.Validate(request);
 
             var aluno = this._studentFactory.Create(request);
 
@@ -37,20 +36,6 @@ namespace Kaloom.API.UseCases.Students.Register
                 Id = aluno.Id,
                 Nome = aluno.Nome
             };
-        }
-
-        private static void Validate(StudentRequest request)
-        {
-            var validator = new StudentRequestValidator();
-
-            var result = validator.Validate(request);
-
-            if (!result.IsValid)
-            {
-                var errors = result.Errors.Select(error => error.ErrorMessage).ToList();
-
-                throw new ErrorOnValidationException(errors);
-            }
         }
     }
 }

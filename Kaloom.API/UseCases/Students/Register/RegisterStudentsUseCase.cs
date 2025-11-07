@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Kaloom.API.Context;
-using Kaloom.API.Models;
 using Kaloom.Communication.DTOs.Responses;
 using Kaloom.Communication.DTOs.Requests;
 using Kaloom.API.UseCases.Students.SharedValidator;
 using Kaloom.API.Factories;
+using Kaloom.Exceptions.ExceptionsBase;
 
 namespace Kaloom.API.UseCases.Students.Register
 {
@@ -27,10 +27,10 @@ namespace Kaloom.API.UseCases.Students.Register
         {
             Validate(request);
 
-            var aluno = _studentFactory.Create(request);
+            var aluno = this._studentFactory.Create(request);
 
-            await _context.AddAsync(aluno);
-            await _context.SaveChangesAsync();
+            await this._context.AddAsync(aluno);
+            await this._context.SaveChangesAsync();
 
             return new StudentResponse
             {
@@ -39,7 +39,7 @@ namespace Kaloom.API.UseCases.Students.Register
             };
         }
 
-        private void Validate(StudentRequest request)
+        private static void Validate(StudentRequest request)
         {
             var validator = new StudentRequestValidator();
 
@@ -49,9 +49,7 @@ namespace Kaloom.API.UseCases.Students.Register
             {
                 var errors = result.Errors.Select(error => error.ErrorMessage).ToList();
 
-                var errorMessages = string.Join(" | ", errors);
-
-                throw new ArgumentException(errorMessages);
+                throw new ErrorOnValidationException(errors);
             }
         }
     }

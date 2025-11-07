@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Kaloom.API.Models;
 using Kaloom.Communication.DTOs.Responses;
 
-namespace Kaloom.API.UseCases.Students.GetById
+namespace Kaloom.API.Factories
 {
-    public interface IGetStudentByIdUseCase
+    public interface IStudentShortFactory
     {
-        public Task<StudentShortResponse> ExecuteAsync(int id);
+        public StudentShortResponse Create(Aluno aluno);
     }
 }

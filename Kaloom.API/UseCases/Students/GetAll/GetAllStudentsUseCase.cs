@@ -1,31 +1,34 @@
+using Kaloom.API.Context;
+using Kaloom.API.Models;
+using Kaloom.Communication.DTOs.Responses;
+using Kaloom.Exceptions.ExceptionsBase;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Kaloom.API.Models;
-using Kaloom.API.Context;
-using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace Kaloom.API.UseCases.Students.GetAll
 {
     public class GetAllStudentsUseCase : IGetAllStudentsUseCase
     {
         private readonly KaloomContext _context;
+        private readonly IMapper _mapper;
 
-        public GetAllStudentsUseCase(KaloomContext context)
+        public GetAllStudentsUseCase(KaloomContext context, IMapper mapper)
         {
             this._context = context;
+            this._mapper = mapper;
         }
 
-        public async Task<List<Aluno>> ExecuteAsync()
+        public async Task<IEnumerable<StudentResponse>> ExecuteAsync()
         {
             var alunos = await this._context.Alunos
-                .Include(u => u.Usuario)
-                .Include(u => u.TipoAluno)
                 .AsNoTracking()
                 .ToListAsync();
                 
-            return alunos;
+            return this._mapper.Map<IEnumerable<StudentResponse>>(alunos);
         }
     }
 }

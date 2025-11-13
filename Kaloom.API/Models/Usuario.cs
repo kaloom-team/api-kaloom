@@ -8,7 +8,6 @@ namespace Kaloom.API.Models
         public string Email { get; set; } = string.Empty;
         public string Senha { get; set; } = string.Empty;
 
-        [JsonIgnore]
-        public Aluno Aluno { get; set; }
+        public required Aluno Aluno { get; set; }
     }
 }

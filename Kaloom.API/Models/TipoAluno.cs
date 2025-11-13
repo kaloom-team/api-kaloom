@@ -7,6 +7,9 @@
         public bool Etec { get; set; }
         public EStatusAcademico? StatusEtec { get; set; }
         public EStatusAcademico? StatusFatec { get; set; }
+        public string Description { get; set; } = string.Empty;
+        public ICollection<Aluno> Alunos { get; set; } = new List<Aluno>();
+
     }
 
     public enum EStatusAcademico

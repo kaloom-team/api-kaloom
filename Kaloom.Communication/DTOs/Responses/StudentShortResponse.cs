@@ -10,9 +10,6 @@ namespace Kaloom.Communication.DTOs.Responses
     {
         public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;
-        public string NomeUsuario { get; set; } = string.Empty;
-        public DateOnly DataNascimento { get; set; }
-        public UserResponse Usuario { get; set; } = new UserResponse();
-        public StudentTypeResponse TipoAluno { get; set; } = new StudentTypeResponse();
+        public string Sobrenome { get; set; } = string.Empty;
     }
 }

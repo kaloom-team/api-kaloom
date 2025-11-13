@@ -15,20 +15,113 @@ namespace Kaloom.API.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Aluno>()
-                .HasOne(a => a.Usuario)
+            modelBuilder.Entity<Aluno>(entity =>
+            {
+                entity.Property(a => a.Nome)
+                .HasColumnType("varchar(16)");
+                entity.Property(a => a.Sobrenome)
+                .HasColumnType("varchar(24)");
+                entity.Property(a => a.NomeUsuario)
+                .HasColumnType("varchar(24)");
+                entity.HasOne(a => a.Usuario)
                 .WithOne(u => u.Aluno)
                 .HasForeignKey<Aluno>(a => a.IdUsuario)
+                .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
-
-            modelBuilder.Entity<Aluno>()
-                .HasOne(a => a.TipoAluno)
-                .WithMany()
+                entity.HasOne(a => a.TipoAluno)
+                .WithMany(t => t.Alunos)
                 .HasForeignKey(a => a.IdTipoAluno)
+                .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
+            });
 
             modelBuilder.Entity<Etec>().ToTable("Etecs");
             modelBuilder.Entity<Fatec>().ToTable("Fatecs");
+
+            modelBuilder.Entity<TipoAluno>()
+                .HasIndex(t => new { t.Fatec, t.Etec, t.StatusFatec, t.StatusEtec })
+                .IsUnique();
+
+            modelBuilder.Entity<TipoAluno>()
+                .Property(t => t.Description)
+                .HasColumnType("varchar(35)");
+
+
+            modelBuilder.Entity<TipoAluno>().HasData(
+                new TipoAluno
+                {
+                    Id = 1,
+                    Fatec = true,
+                    Etec = false,
+                    StatusFatec = EStatusAcademico.Cursando,
+                    StatusEtec = null,
+                    Description = "Aluno Fatec"
+                },
+                new TipoAluno
+                {
+                    Id = 2,
+                    Fatec = true,
+                    Etec = false,
+                    StatusFatec = EStatusAcademico.Formado,
+                    StatusEtec = null,
+                    Description = "Ex-Aluno Fatec"
+                },
+                new TipoAluno
+                {
+                    Id = 3,
+                    Fatec = false,
+                    Etec = true,
+                    StatusFatec = null,
+                    StatusEtec = EStatusAcademico.Cursando,
+                    Description = "Aluno Etec"
+                },
+                new TipoAluno
+                {
+                    Id = 4,
+                    Fatec = false,
+                    Etec = true,
+                    StatusFatec = null,
+                    StatusEtec = EStatusAcademico.Formado,
+                    Description = "Ex-Aluno Etec"
+                },
+                new TipoAluno
+                {
+                    Id = 5,
+                    Fatec = true,
+                    Etec = true,
+                    StatusFatec = EStatusAcademico.Cursando,
+                    StatusEtec = EStatusAcademico.Cursando,
+                    Description = "Aluno Fatec e Etec"
+                },
+                new TipoAluno
+                {
+                    Id = 6,
+                    Fatec = true,
+                    Etec = true,
+                    StatusFatec = EStatusAcademico.Cursando,
+                    StatusEtec = EStatusAcademico.Formado,
+                    Description = "Aluno Fatec e Ex-Aluno Etec"
+                },
+                new TipoAluno
+                {
+                    Id = 7,
+                    Fatec = true,
+                    Etec = true,
+                    StatusFatec = EStatusAcademico.Formado,
+                    StatusEtec = EStatusAcademico.Cursando,
+                    Description = "Aluno Etec e Ex-Aluno Fatec"
+                },
+                new TipoAluno
+                {
+                    Id = 8,
+                    Fatec = true,
+                    Etec = true,
+                    StatusFatec = EStatusAcademico.Formado,
+                    StatusEtec = EStatusAcademico.Formado,
+                    Description = "Ex-Aluno Fatec e Ex-Aluno Etec"
+                }
+            );
+
 
             modelBuilder.Entity<Etec>().HasData(
                new Etec
@@ -76,6 +169,7 @@ namespace Kaloom.API.Context
                }
             );
         }
+
 
         public DbSet<Aluno> Alunos { get; set; }
         public DbSet<TipoAluno> TipoAlunos { get; set; }

@@ -6,13 +6,13 @@ using System.Net;
 
 namespace Kaloom.Exceptions.ExceptionsBase
 {
-    public class NotFoundException : SystemException
+    public class NotFoundException : KaloomException
     {
         public NotFoundException(string message) : base(message)
         {
         }
 
-        public List<string> GetErrors() => [Message];
-        public HttpStatusCode GetHttpStatusCode() => HttpStatusCode.NotFound;
+        public override List<string> GetErrors() => [Message];
+        public override HttpStatusCode GetStatusCode() => HttpStatusCode.NotFound;
     }
 }

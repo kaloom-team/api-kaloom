@@ -7,8 +7,8 @@ using Kaloom.Communication.DTOs.Requests;
 
 namespace Kaloom.API.UseCases.Students.Register
 {
-    public interface IRegisterStudentsUseCase
+    public interface IRegisterStudentUseCase
     {
-        public Task<StudentResponse> ExecuteAsync(StudentRequest request);
+        public Task<StudentShortResponse> ExecuteAsync(StudentRequest request);
     }
 }

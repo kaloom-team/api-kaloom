@@ -4,6 +4,10 @@ using Kaloom.Communication.DTOs.Requests;
 using Kaloom.Communication.DTOs.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Kaloom.API.UseCases.Users.GetAll;
+using Kaloom.API.UseCases.Users.GetById;
+using System.Linq;
+using Kaloom.API.UseCases.Users;
 
 namespace Kaloom.API.Controllers
 {
@@ -11,43 +15,30 @@ namespace Kaloom.API.Controllers
     [Route("api/[Controller]")]
     public class UsuarioController : ControllerBase
     {
-        private readonly KaloomContext _context;
+        private readonly IUsersUseCases _useCases;
 
-        public UsuarioController(KaloomContext context)
+        public UsuarioController(IUsersUseCases useCases)
         {
-            this._context = context;
+            this._useCases = useCases;
         }
 
         [HttpGet]
-        [ProducesResponseType<List<Usuario>>(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType<IEnumerable<UserResponse>>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllAsync()
         {
-            var usuarios = await this._context.Usuarios
-                .AsNoTracking()
-                .ToListAsync();
-
-            if(usuarios.Count == 0)
-                return NotFound();
+            var usuarios = await this._useCases.GetAll.ExecuteAsync();
 
             return Ok(usuarios);
         }
 
         [HttpGet("{id}", Name = "GetUserById")]
-        [ProducesResponseType<Usuario>(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType<UserResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
-            var usuario = await this._context.Usuarios
-                .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.Id == id);
-
-            if (usuario == null)
-            {
-                return NotFound(new { message = $"Nenhum usuário encontrado com o ID {id}." });
-            }
+            var usuario = await this._useCases.GetById.ExecuteAsync(id);
 
             return Ok(usuario);
         }
@@ -58,22 +49,31 @@ namespace Kaloom.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateAsync([FromBody] UserRequest request)
         {
-            var usuario = new Usuario
-            {
-                Email = request.Email,
-                Senha = request.Senha
-            };
+            var response = await this._useCases.Register.ExecuteAsync(request);
 
-            await _context.AddAsync(usuario);
-            await _context.SaveChangesAsync();
+            return CreatedAtRoute("GetUserById", new { id = response.Id }, response);
+        }
 
-            var response = new UserResponse
-            {
-                Id = usuario.Id,
-                Email = usuario.Email
-            };
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] UserRequest request)
+        {
+            await this._useCases.Update.ExecuteAsync(id, request);
 
-            return CreatedAtRoute("GetUserById", new { id = usuario.Id }, response);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteAsync([FromRoute] int id)
+        {
+            await this._useCases.Delete.ExecuteAsync(id);
+
+            return NoContent();
         }
 
         [HttpPost("Login")]
@@ -81,27 +81,11 @@ namespace Kaloom.API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> LoginAsync([FromBody] UserLoginRequest request)
+        public async Task<IActionResult> LoginAsync([FromBody] UserRequest request)
         {
-            var usuarios = await this._context.Usuarios
-                .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.Email == request.Email);
+            var response = await this._useCases.Login.ExecuteAsync(request);
 
-            if (usuarios == null)
-                return Unauthorized(new { message = "Usuário não encontrado." });
-
-            if (usuarios.Senha != request.Senha)
-                return Unauthorized(new { message = "Senha incorreta." });
-
-            var aluno = await this._context.Alunos
-                .AsNoTracking()
-                .Include(u => u.TipoAluno)
-                .FirstOrDefaultAsync(a => a.IdUsuario == usuarios.Id);
-
-            if (aluno == null)
-                return NotFound(new { message = "Aluno não encontrado para este usuário." });
-
-            return Ok(new UserLoginResponse("Login realizado com sucesso!", aluno));
+            return Ok(response);
         }
     }
 }

@@ -15,6 +15,11 @@ namespace Kaloom.Exceptions.ExceptionsBase
             _errors = errorsMessages;
         }
 
+        public ErrorOnValidationException(string errorsMessages) : base("Erro de validação")
+        {
+            _errors = [errorsMessages];
+        }
+
         public override List<string> GetErrors() => _errors;
 
         public override HttpStatusCode GetStatusCode() => HttpStatusCode.BadRequest;

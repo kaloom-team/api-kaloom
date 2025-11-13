@@ -4,6 +4,7 @@ using Kaloom.API.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kaloom.API.Migrations
 {
     [DbContext(typeof(KaloomContext))]
-    partial class KaloomContextModelSnapshot : ModelSnapshot
+    [Migration("20251112232710_SeedStudentType")]
+    partial class SeedStudentType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,10 +156,6 @@ namespace Kaloom.API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("varchar(35)");
-
                     b.Property<bool>("Etec")
                         .HasColumnType("tinyint(1)");
 
@@ -180,7 +179,6 @@ namespace Kaloom.API.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "Aluno Fatec",
                             Etec = false,
                             Fatec = true,
                             StatusFatec = 1
@@ -188,7 +186,6 @@ namespace Kaloom.API.Migrations
                         new
                         {
                             Id = 2,
-                            Description = "Ex-Aluno Fatec",
                             Etec = false,
                             Fatec = true,
                             StatusFatec = 2
@@ -196,7 +193,6 @@ namespace Kaloom.API.Migrations
                         new
                         {
                             Id = 3,
-                            Description = "Aluno Etec",
                             Etec = true,
                             Fatec = false,
                             StatusEtec = 1
@@ -204,7 +200,6 @@ namespace Kaloom.API.Migrations
                         new
                         {
                             Id = 4,
-                            Description = "Ex-Aluno Etec",
                             Etec = true,
                             Fatec = false,
                             StatusEtec = 2
@@ -212,7 +207,6 @@ namespace Kaloom.API.Migrations
                         new
                         {
                             Id = 5,
-                            Description = "Aluno Fatec e Etec",
                             Etec = true,
                             Fatec = true,
                             StatusEtec = 1,
@@ -221,7 +215,6 @@ namespace Kaloom.API.Migrations
                         new
                         {
                             Id = 6,
-                            Description = "Aluno Fatec e Ex-Aluno Etec",
                             Etec = true,
                             Fatec = true,
                             StatusEtec = 2,
@@ -230,7 +223,6 @@ namespace Kaloom.API.Migrations
                         new
                         {
                             Id = 7,
-                            Description = "Aluno Etec e Ex-Aluno Fatec",
                             Etec = true,
                             Fatec = true,
                             StatusEtec = 1,
@@ -239,7 +231,6 @@ namespace Kaloom.API.Migrations
                         new
                         {
                             Id = 8,
-                            Description = "Ex-Aluno Fatec e Ex-Aluno Etec",
                             Etec = true,
                             Fatec = true,
                             StatusEtec = 2,

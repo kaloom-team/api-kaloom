@@ -1,12 +1,15 @@
 using Kaloom.API.Context;
 using Kaloom.API.Factories;
+using Kaloom.API.Facades;
 using Kaloom.API.Filters;
+
 using Kaloom.API.UseCases.Students;
 using Kaloom.API.UseCases.Students.Delete;
 using Kaloom.API.UseCases.Students.GetAll;
 using Kaloom.API.UseCases.Students.GetById;
 using Kaloom.API.UseCases.Students.Register;
 using Kaloom.API.UseCases.Students.Update;
+
 using Kaloom.API.UseCases.Users;
 using Kaloom.API.UseCases.Users.Delete;
 using Kaloom.API.UseCases.Users.GetAll;
@@ -14,9 +17,20 @@ using Kaloom.API.UseCases.Users.GetById;
 using Kaloom.API.UseCases.Users.Login;
 using Kaloom.API.UseCases.Users.Register;
 using Kaloom.API.UseCases.Users.Update;
+
+using Kaloom.API.UseCases.Etecs.Delete;
+using Kaloom.API.UseCases.Etecs.GetAll;
+using Kaloom.API.UseCases.Etecs.GetById;
+using Kaloom.API.UseCases.Etecs.Register;
+using Kaloom.API.UseCases.Etecs.Update;
+
+using Kaloom.API.UseCases.Fatecs.GetAll;
+using Kaloom.API.UseCases.Fatecs.GetById;
+using Kaloom.API.UseCases.Fatecs.Register;
+using Kaloom.API.UseCases.Fatecs.Update;
+using Kaloom.API.UseCases.Fatecs.Delete;
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -60,6 +74,23 @@ builder.Services.AddScoped<IRegisterUserUseCase, RegisterUserUseCase>();
 builder.Services.AddScoped<IUpdateUserUseCase, UpdateUserUseCase>();
 builder.Services.AddScoped<IDeleteUserUseCase, DeleteUserUseCase>();
 builder.Services.AddScoped<IUserLoginUseCase, UserLoginUseCase>();
+
+builder.Services.AddScoped<IInstitutionUnitResponseFactory, InstitutionUnitResponseFactory>();
+builder.Services.AddScoped<IInstitutionUnitFactory, InstitutionUnitFactory>();
+
+builder.Services.AddScoped<IEtecFacade, EtecFacade>();
+builder.Services.AddScoped<IGetAllEtecsUseCase, GetAllEtecsUseCase>();
+builder.Services.AddScoped<IGetEtecByIdUseCase, GetEtecByIdUseCase>();
+builder.Services.AddScoped<IRegisterEtecUseCase, RegisterEtecUseCase>();
+builder.Services.AddScoped<IUpdateEtecUseCase, UpdateEtecUseCase>();
+builder.Services.AddScoped<IDeleteEtecUseCase, DeleteEtecUseCase>();
+
+builder.Services.AddScoped<IFatecFacade, FatecFacade>();
+builder.Services.AddScoped<IGetAllFatecsUseCase, GetAllFatecsUseCase>();
+builder.Services.AddScoped<IGetFatecByIdUseCase, GetFatecByIdUseCase>();
+builder.Services.AddScoped<IRegisterFatecUseCase, RegisterFatecUseCase>();
+builder.Services.AddScoped<IUpdateFatecUseCase, UpdateFatecUseCase>();
+builder.Services.AddScoped<IDeleteFatecUseCase, DeleteFatecUseCase>();
 
 builder.Services.AddMvc(option => option.Filters.Add(typeof(ExceptionFilter)));
 

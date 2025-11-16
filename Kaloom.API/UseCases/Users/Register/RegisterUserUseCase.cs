@@ -27,6 +27,7 @@ namespace Kaloom.API.UseCases.Users.Register
                 .FirstOrDefaultAsync(u => u.Email == request.Email) is null))
                 throw new ErrorOnValidationException("Email já cadastrado.");
 
+
             Validate(request);
 
             var usuario = _mapper.Map<Usuario>(request);

@@ -1,7 +1,7 @@
-﻿using Kaloom.API.Context;
-using Kaloom.API.Models;
+﻿using Kaloom.API.Facades;
+using Kaloom.Communication.DTOs.Requests;
+using Kaloom.Communication.DTOs.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Kaloom.API.Controllers
 {
@@ -9,57 +9,57 @@ namespace Kaloom.API.Controllers
     [Route("api/[Controller]")]
     public class FatecController : Controller
     {
-        private readonly KaloomContext _context;
-        public FatecController(KaloomContext context)
+        private readonly IFatecFacade _fatecFacade;
+
+        public FatecController(IFatecFacade fatecFacade)
         {
-            this._context = context;
+            this._fatecFacade = fatecFacade;
         }
 
         [HttpGet]
-        [ProducesResponseType<List<Fatec>>(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType<IEnumerable<FatecResponse>>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllAsync()
-        {
-            var fatecs = await this._context.Fatecs
-                .AsNoTracking()
-                .ToListAsync();
-
-            if (fatecs.Count == 0)
-                return NotFound();
-
-            return Ok(fatecs);
-        }
+            => Ok(await this._fatecFacade.GetAll.ExecuteAsync());
 
         [HttpGet("{id}", Name = "GetFatecById")]
-        [ProducesResponseType<Fatec>(StatusCodes.Status200OK)]
+        [ProducesResponseType<FatecResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
-        {
-            var fatec = await this._context.Fatecs
-                .AsNoTracking()
-                .FirstOrDefaultAsync(f => f.Id == id);
-
-            if (fatec == null)
-                return NotFound(new { message = $"Nenhuma Fatec encontrada com o ID {id}." });
-
-            return Ok(fatec);
-        }
+            => Ok(await this._fatecFacade.GetById.ExecuteAsync(id));
 
         [HttpPost]
-        [ProducesResponseType<Fatec>(StatusCodes.Status201Created)]
+        [ProducesResponseType<FatecResponse>(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateAsync([FromBody] Fatec fatec)
+        public async Task<IActionResult> CreateAsync([FromBody] FatecRequest fatec)
         {
-            if(string.IsNullOrWhiteSpace(fatec.NomeUnidade))
-                return BadRequest(new { message = "O nome da unidade não pode ser vazio ou ter espaços em branco" });
+            var response = await this._fatecFacade.Register.ExecuteAsync(fatec);
 
-            await _context.AddAsync(fatec);
-            await _context.SaveChangesAsync();
+            return CreatedAtRoute("GetFatecById", new { id = response.Id }, response);
+        }
 
-            return CreatedAtRoute("GetFatecById", new { id = fatec.Id }, fatec);
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] FatecRequest fatec)
+        {
+            await this._fatecFacade.Update.ExecuteAsync(id, fatec);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteAsync([FromRoute] int id)
+        {
+            await this._fatecFacade.Delete.ExecuteAsync(id);
+
+            return NoContent();
         }
     }
 }

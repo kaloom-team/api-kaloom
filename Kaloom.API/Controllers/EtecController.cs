@@ -1,7 +1,7 @@
-﻿using Kaloom.API.Context;
-using Kaloom.API.Models;
+﻿using Kaloom.API.Facades;
+using Kaloom.Communication.DTOs.Requests;
+using Kaloom.Communication.DTOs.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Kaloom.API.Controllers
 {
@@ -9,57 +9,56 @@ namespace Kaloom.API.Controllers
     [Route("api/[Controller]")]
     public class EtecController : Controller
     {
-        private readonly KaloomContext _context;
-        public EtecController(KaloomContext context)
+        private readonly IEtecFacade _etecFacade;
+        public EtecController(IEtecFacade etecFacade)
         {
-            this._context = context;
+            this._etecFacade = etecFacade;
         }
 
         [HttpGet]
-        [ProducesResponseType<List<Etec>>(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType<IEnumerable<EtecResponse>>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllAsync()
-        {
-            var etecs = await this._context.Etecs
-                .AsNoTracking()
-                .ToListAsync();
-
-            if (etecs.Count == 0)
-                return NotFound();
-
-            return Ok(etecs);
-        }
+            => Ok(await this._etecFacade.GetAll.ExecuteAsync());
 
         [HttpGet("{id}", Name = "GetEtecById")]
-        [ProducesResponseType<Etec>(StatusCodes.Status200OK)]
+        [ProducesResponseType<EtecResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
-        {
-            var etec = await this._context.Etecs
-                .AsNoTracking()
-                .FirstOrDefaultAsync(e => e.Id == id);
-
-            if (etec == null)
-                return NotFound(new { message = $"Nenhuma Etec encontrada com o ID {id}." });
-
-            return Ok(etec);
-        }
-
+            => Ok(await this._etecFacade.GetById.ExecuteAsync(id));
+        
         [HttpPost]
-        [ProducesResponseType<Etec>(StatusCodes.Status201Created)]
+        [ProducesResponseType<EtecResponse>(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateAsync([FromBody] Etec etec)
+        public async Task<IActionResult> CreateAsync([FromBody] EtecRequest etec)
         {
-            if (string.IsNullOrWhiteSpace(etec.NomeUnidade))
-                return BadRequest(new { message = "O nome da unidade não pode ser vazio ou ter espaços em branco" });
+            var response = await this._etecFacade.Register.ExecuteAsync(etec);
 
-            await _context.AddAsync(etec);
-            await _context.SaveChangesAsync();
+            return CreatedAtRoute("GetEtecById", new { id = response.Id }, response);
+        }
 
-            return CreatedAtRoute("GetEtecById", new { id = etec.Id }, etec);
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] EtecRequest etec)
+        {
+            await this._etecFacade.Update.ExecuteAsync(id, etec);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteAsync([FromRoute] int id)
+        {
+            await this._etecFacade.Delete.ExecuteAsync(id);
+
+            return NoContent();
         }
     }
 }

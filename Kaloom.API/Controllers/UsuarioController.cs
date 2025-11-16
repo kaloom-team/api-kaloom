@@ -1,13 +1,7 @@
-﻿using Kaloom.API.Context;
-using Kaloom.API.Models;
-using Kaloom.Communication.DTOs.Requests;
+﻿using Kaloom.Communication.DTOs.Requests;
 using Kaloom.Communication.DTOs.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Kaloom.API.UseCases.Users.GetAll;
-using Kaloom.API.UseCases.Users.GetById;
-using System.Linq;
-using Kaloom.API.UseCases.Users;
+using Kaloom.API.Facades;
 
 namespace Kaloom.API.Controllers
 {
@@ -15,33 +9,25 @@ namespace Kaloom.API.Controllers
     [Route("api/[Controller]")]
     public class UsuarioController : ControllerBase
     {
-        private readonly IUsersUseCases _useCases;
+        private readonly IUserFacade _userFacade;
 
-        public UsuarioController(IUsersUseCases useCases)
+        public UsuarioController(IUserFacade userFacade)
         {
-            this._useCases = useCases;
+            this._userFacade = userFacade;
         }
 
         [HttpGet]
         [ProducesResponseType<IEnumerable<UserResponse>>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllAsync()
-        {
-            var usuarios = await this._useCases.GetAll.ExecuteAsync();
-
-            return Ok(usuarios);
-        }
+            => Ok(await this._userFacade.GetAll.ExecuteAsync());
 
         [HttpGet("{id}", Name = "GetUserById")]
         [ProducesResponseType<UserResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
-        {
-            var usuario = await this._useCases.GetById.ExecuteAsync(id);
-
-            return Ok(usuario);
-        }
+            => Ok(await this._userFacade.GetById.ExecuteAsync(id));
 
         [HttpPost]
         [ProducesResponseType<UserResponse>(StatusCodes.Status201Created)]
@@ -49,7 +35,7 @@ namespace Kaloom.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateAsync([FromBody] UserRequest request)
         {
-            var response = await this._useCases.Register.ExecuteAsync(request);
+            var response = await this._userFacade.Register.ExecuteAsync(request);
 
             return CreatedAtRoute("GetUserById", new { id = response.Id }, response);
         }
@@ -60,7 +46,7 @@ namespace Kaloom.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] UserRequest request)
         {
-            await this._useCases.Update.ExecuteAsync(id, request);
+            await this._userFacade.Update.ExecuteAsync(id, request);
 
             return NoContent();
         }
@@ -71,7 +57,7 @@ namespace Kaloom.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteAsync([FromRoute] int id)
         {
-            await this._useCases.Delete.ExecuteAsync(id);
+            await this._userFacade.Delete.ExecuteAsync(id);
 
             return NoContent();
         }
@@ -82,10 +68,6 @@ namespace Kaloom.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> LoginAsync([FromBody] UserRequest request)
-        {
-            var response = await this._useCases.Login.ExecuteAsync(request);
-
-            return Ok(response);
-        }
+            => Ok(await this._userFacade.Login.ExecuteAsync(request));
     }
 }

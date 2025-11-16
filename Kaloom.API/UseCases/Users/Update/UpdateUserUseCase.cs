@@ -1,5 +1,4 @@
 ﻿using Kaloom.API.Context;
-using Kaloom.API.UseCases.Students.Utils;
 using Kaloom.Communication.DTOs.Requests;
 using Kaloom.Exceptions.ExceptionsBase;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +25,8 @@ namespace Kaloom.API.UseCases.Users.Update
                 throw new ErrorOnValidationException("Email já cadastrado.");
             }
 
-            var usuario = await this._context.Usuarios.FindAsync(id) ?? throw new NotFoundException($"Usuario com ID {id} não encontrado.");
+            var usuario = await this._context.Usuarios.FindAsync(id) 
+                ?? throw new NotFoundException($"Usuario com ID {id} não encontrado.");
 
 
             usuario.Email = request.Email;

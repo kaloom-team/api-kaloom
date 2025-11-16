@@ -174,7 +174,12 @@ namespace Kaloom.API.Migrations
                     b.HasIndex("Fatec", "Etec", "StatusFatec", "StatusEtec")
                         .IsUnique();
 
-                    b.ToTable("TipoAlunos");
+                    b.ToTable("TipoAlunos", t =>
+                        {
+                            t.HasCheckConstraint("CK_StudentType_StatusEtec", "StatusEtec IN (1,2)");
+
+                            t.HasCheckConstraint("CK_StudentType_StatusFatec", "StatusFatec IN (1,2)");
+                        });
 
                     b.HasData(
                         new

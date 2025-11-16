@@ -8,10 +8,10 @@ namespace Kaloom.API.Facades
 {
     public interface IEtecFacade
     {
-        public IGetAllEtecsUseCase GetAll { get; set; }
-        public IGetEtecByIdUseCase GetById { get; set; }
-        public IRegisterEtecUseCase Register { get; set; }
-        public IUpdateEtecUseCase Update { get; set; }  
-        public IDeleteEtecUseCase Delete { get; set; }
+        public IGetAllEtecsUseCase GetAll { get; }
+        public IGetEtecByIdUseCase GetById { get; }
+        public IRegisterEtecUseCase Register { get; }
+        public IUpdateEtecUseCase Update { get; }  
+        public IDeleteEtecUseCase Delete { get; }
     }
 }

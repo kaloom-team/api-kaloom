@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Kaloom.API.Models;
+using Kaloom.Communication.Enums;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Kaloom.API.Models;
 
 namespace Kaloom.API.Context
 {
@@ -46,6 +47,19 @@ namespace Kaloom.API.Context
                 .Property(t => t.Description)
                 .HasColumnType("varchar(35)");
 
+            modelBuilder.Entity<TipoAluno>()
+                .ToTable(t => t.HasCheckConstraint(
+                    "CK_StudentType_StatusEtec",
+                    "StatusEtec IN (1,2)"
+                ));
+
+            modelBuilder.Entity<TipoAluno>()
+                .ToTable(t => t.HasCheckConstraint(
+                    "CK_StudentType_StatusFatec",
+                    "StatusFatec IN (1,2)"
+                ));
+
+
 
             modelBuilder.Entity<TipoAluno>().HasData(
                 new TipoAluno
@@ -53,7 +67,7 @@ namespace Kaloom.API.Context
                     Id = 1,
                     Fatec = true,
                     Etec = false,
-                    StatusFatec = EStatusAcademico.Cursando,
+                    StatusFatec = EAcademicStatus.Cursando,
                     StatusEtec = null,
                     Description = "Aluno Fatec"
                 },
@@ -62,7 +76,7 @@ namespace Kaloom.API.Context
                     Id = 2,
                     Fatec = true,
                     Etec = false,
-                    StatusFatec = EStatusAcademico.Formado,
+                    StatusFatec = EAcademicStatus.Formado,
                     StatusEtec = null,
                     Description = "Ex-Aluno Fatec"
                 },
@@ -72,7 +86,7 @@ namespace Kaloom.API.Context
                     Fatec = false,
                     Etec = true,
                     StatusFatec = null,
-                    StatusEtec = EStatusAcademico.Cursando,
+                    StatusEtec = EAcademicStatus.Cursando,
                     Description = "Aluno Etec"
                 },
                 new TipoAluno
@@ -81,7 +95,7 @@ namespace Kaloom.API.Context
                     Fatec = false,
                     Etec = true,
                     StatusFatec = null,
-                    StatusEtec = EStatusAcademico.Formado,
+                    StatusEtec = EAcademicStatus.Formado,
                     Description = "Ex-Aluno Etec"
                 },
                 new TipoAluno
@@ -89,8 +103,8 @@ namespace Kaloom.API.Context
                     Id = 5,
                     Fatec = true,
                     Etec = true,
-                    StatusFatec = EStatusAcademico.Cursando,
-                    StatusEtec = EStatusAcademico.Cursando,
+                    StatusFatec = EAcademicStatus.Cursando,
+                    StatusEtec = EAcademicStatus.Cursando,
                     Description = "Aluno Fatec e Etec"
                 },
                 new TipoAluno
@@ -98,8 +112,8 @@ namespace Kaloom.API.Context
                     Id = 6,
                     Fatec = true,
                     Etec = true,
-                    StatusFatec = EStatusAcademico.Cursando,
-                    StatusEtec = EStatusAcademico.Formado,
+                    StatusFatec = EAcademicStatus.Cursando,
+                    StatusEtec = EAcademicStatus.Formado,
                     Description = "Aluno Fatec e Ex-Aluno Etec"
                 },
                 new TipoAluno
@@ -107,8 +121,8 @@ namespace Kaloom.API.Context
                     Id = 7,
                     Fatec = true,
                     Etec = true,
-                    StatusFatec = EStatusAcademico.Formado,
-                    StatusEtec = EStatusAcademico.Cursando,
+                    StatusFatec = EAcademicStatus.Formado,
+                    StatusEtec = EAcademicStatus.Cursando,
                     Description = "Aluno Etec e Ex-Aluno Fatec"
                 },
                 new TipoAluno
@@ -116,8 +130,8 @@ namespace Kaloom.API.Context
                     Id = 8,
                     Fatec = true,
                     Etec = true,
-                    StatusFatec = EStatusAcademico.Formado,
-                    StatusEtec = EStatusAcademico.Formado,
+                    StatusFatec = EAcademicStatus.Formado,
+                    StatusEtec = EAcademicStatus.Formado,
                     Description = "Ex-Aluno Fatec e Ex-Aluno Etec"
                 }
             );

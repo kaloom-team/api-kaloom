@@ -20,10 +20,10 @@ namespace Kaloom.API.UseCases.Users.GetById
                 .FirstOrDefaultAsync(u => u.Id == id) ?? throw new NotFoundException($"Usuário de ID {id} não encontrado.");
 
             return new UserResponse
-            {
-                Id = usuario.Id,
-                Email = usuario.Email
-            };
+            (
+                usuario.Id,
+                usuario.Email
+            );
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Kaloom.API.Context;
+﻿using AutoMapper;
+using Kaloom.API.Context;
 using Kaloom.Communication.DTOs.Requests;
 using Kaloom.Communication.DTOs.Responses;
 using Kaloom.Exceptions.ExceptionsBase;
@@ -10,9 +11,11 @@ namespace Kaloom.API.UseCases.Users.Login
     public class UserLoginUseCase : IUserLoginUseCase
     {
         private readonly KaloomContext _context;
-        public UserLoginUseCase(KaloomContext context)
+        private readonly IMapper _mapper;
+        public UserLoginUseCase(KaloomContext context, IMapper mapper)
         {
             this._context = context;
+            this._mapper = mapper;
         }
         public async Task<UserLoginResponse> ExecuteAsync(UserRequest request)
         {
@@ -32,7 +35,7 @@ namespace Kaloom.API.UseCases.Users.Login
                 .FirstOrDefaultAsync(a => a.IdUsuario == usuarios.Id)
                 ?? throw new NotFoundException("Aluno não encontrado para este usuário.");
 
-            return new UserLoginResponse("Login realizado com sucesso!", aluno);
+            return new UserLoginResponse("Login realizado com sucesso!", _mapper.Map<StudentResponse>(aluno));
         }
     }
 }

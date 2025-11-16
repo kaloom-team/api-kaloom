@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Kaloom.API.Context;
-using Kaloom.Communication.DTOs.Requests;
 using Kaloom.API.UseCases.Students.Utils;
+using Kaloom.Communication.DTOs.Requests;
 using Kaloom.Exceptions.ExceptionsBase;
 
 namespace Kaloom.API.UseCases.Students.Update

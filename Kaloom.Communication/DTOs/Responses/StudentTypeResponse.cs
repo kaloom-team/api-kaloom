@@ -1,14 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Kaloom.Communication.Enums;
 
 namespace Kaloom.Communication.DTOs.Responses
 {
-    public class StudentTypeResponse
-    {
-        public int Id { get; set; }
-        public bool Fatec { get; set; }
-        public bool Etec { get; set; }
-    }
+    public sealed record StudentTypeResponse
+    (
+        int Id,
+        bool Fatec,
+        bool Etec,
+        EAcademicStatus? StatusEtec,
+        EAcademicStatus? StatusFatec,
+        string Description
+    );
 }

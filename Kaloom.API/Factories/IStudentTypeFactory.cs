@@ -1,10 +1,10 @@
 ﻿using Kaloom.API.Models;
-using Kaloom.Communication.DTOs.Responses;
+using Kaloom.Communication.DTOs.Requests;
 
 namespace Kaloom.API.Factories
 {
     public interface IStudentTypeFactory
     {
-        public StudentTypeResponse Create(TipoAluno tipoAluno);
+        public TipoAluno Create(StudentTypeRequest request);
     }
 }

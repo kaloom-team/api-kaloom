@@ -1,13 +1,7 @@
-using Kaloom.API.Context;
-using Kaloom.API.Models;
-using Kaloom.Communication.DTOs.Responses;
-using Kaloom.Exceptions.ExceptionsBase;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
+using Kaloom.API.Context;
+using Kaloom.Communication.DTOs.Responses;
+using Microsoft.EntityFrameworkCore;
 
 namespace Kaloom.API.UseCases.Students.GetAll
 {

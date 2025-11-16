@@ -1,14 +1,14 @@
 ﻿namespace Kaloom.Communication.DTOs.Responses
 {
-    public class UserLoginResponse
+    public sealed record UserLoginResponse
     {
-        public string Message { get; set; } = string.Empty;
-        public object? Aluno { get; set; }
+        public string Message { get; }
+        public StudentResponse? Student { get; }
 
-        public UserLoginResponse(string msg, object? aluno)
+        public UserLoginResponse(string msg, StudentResponse? student)
         {
             this.Message = msg;
-            this.Aluno = aluno;
+            this.Student = student;
         }
     }
 }

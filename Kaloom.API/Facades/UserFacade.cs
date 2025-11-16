@@ -5,9 +5,9 @@ using Kaloom.API.UseCases.Users.Login;
 using Kaloom.API.UseCases.Users.Register;
 using Kaloom.API.UseCases.Users.Update;
 
-namespace Kaloom.API.UseCases.Users
+namespace Kaloom.API.Facades
 {
-    public class UsersUseCases : IUsersUseCases
+    public class UserFacade : IUserFacade
     {
         public IGetAllUsersUseCase GetAll { get; set; }
         public IGetUserByIdUseCase GetById { get; set; }
@@ -16,7 +16,7 @@ namespace Kaloom.API.UseCases.Users
         public IDeleteUserUseCase Delete { get; set; }
         public IUserLoginUseCase Login { get; set; }
 
-        public UsersUseCases(
+        public UserFacade(
             IGetAllUsersUseCase getAll,
             IGetUserByIdUseCase getById,
             IRegisterUserUseCase register,

@@ -1,17 +1,19 @@
 ﻿using Kaloom.API.Models;
-using Kaloom.Communication.DTOs.Responses;
+using Kaloom.Communication.DTOs.Requests;
 
 namespace Kaloom.API.Factories
 {
     public class StudentTypeFactory : IStudentTypeFactory
     {
-        public StudentTypeResponse Create(TipoAluno tipoAluno)
+        public TipoAluno Create(StudentTypeRequest request)
         {
-            return new StudentTypeResponse
+            return new TipoAluno
             {
-                Id = tipoAluno.Id,
-                Fatec = tipoAluno.Fatec,
-                Etec = tipoAluno.Etec
+                Fatec = request.Fatec,
+                Etec = request.Etec,
+                StatusFatec = request.StatusFatec,
+                StatusEtec = request.StatusEtec,
+                Description = request.Description
             };
         }
     }

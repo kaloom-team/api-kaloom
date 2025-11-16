@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Kaloom.API.Context;
-using Kaloom.API.Models;
-using Kaloom.Communication.DTOs.Responses;
-using Kaloom.Communication.DTOs.Requests;
-using Kaloom.API.Factories;
-using Kaloom.API.UseCases.Students.Utils;
 using AutoMapper;
+using Kaloom.API.Context;
+using Kaloom.API.Factories;
+using Kaloom.API.Models;
+using Kaloom.API.UseCases.Students.Utils;
+using Kaloom.Communication.DTOs.Requests;
+using Kaloom.Communication.DTOs.Responses;
 
 namespace Kaloom.API.UseCases.Students.Register
 {
@@ -23,7 +18,7 @@ namespace Kaloom.API.UseCases.Students.Register
         {
             this._context = context;
             this._studentShortFactory = studentShortFactory;
-            _mapper = mapper;
+            this._mapper = mapper;
         }
 
         public async Task<StudentShortResponse> ExecuteAsync(StudentRequest request)

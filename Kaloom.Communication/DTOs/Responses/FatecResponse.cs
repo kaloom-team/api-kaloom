@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Kaloom.Communication.DTOs.Responses
+﻿namespace Kaloom.Communication.DTOs.Responses
 {
-    public class FatecResponse : IInstitutionResponse
+    public sealed record FatecResponse : IInstitutionResponse
     {
-        public int Id { get; set; }
-        public string NomeUnidade { get; set; } = string.Empty;
+        public int Id { get; init; }
+        public string NomeUnidade { get; init; }
+        public FatecResponse(int Id, string NomeUnidade)
+        {
+            this.Id = Id;
+            this.NomeUnidade = NomeUnidade;
+        }
+
+        public FatecResponse()
+        {
+        }
     }
+    
 }

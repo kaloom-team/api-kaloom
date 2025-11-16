@@ -1,5 +1,4 @@
-﻿
-using Kaloom.Communication.DTOs.Responses;
+﻿using Kaloom.Communication.DTOs.Responses;
 
 namespace Kaloom.API.UseCases.Fatecs.GetAll
 {

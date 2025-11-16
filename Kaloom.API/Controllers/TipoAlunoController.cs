@@ -1,8 +1,7 @@
-﻿using Kaloom.API.Context;
-using Kaloom.API.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Kaloom.API.Facades;
+using Kaloom.Communication.DTOs.Requests;
+using Kaloom.Communication.DTOs.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Kaloom.API.Controllers
 {
@@ -10,55 +9,57 @@ namespace Kaloom.API.Controllers
     [ApiController]
     public class TipoAlunoController : ControllerBase
     {
-        private readonly KaloomContext _context;
+        private readonly IStudentTypeFacade _studentTypeFacade;
 
-        public TipoAlunoController(KaloomContext context)
+        public TipoAlunoController(IStudentTypeFacade studentTypeFacade)
         {
-            this._context = context;
+            this._studentTypeFacade = studentTypeFacade;
         }
 
         [HttpGet]
-        [ProducesResponseType<List<TipoAluno>>(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType<IReadOnlyList<StudentTypeResponse>>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllAsync()
-        {
-            var tipo = await _context.TipoAlunos
-                .AsNoTracking()
-                .ToListAsync();
-
-            if (tipo.Count == 0)
-                return NotFound();
-
-            return Ok(tipo);
-        }
+            => Ok(await this._studentTypeFacade.GetAll.ExecuteAsync());
 
         [HttpGet("{id}", Name = "GetStudentTypeById")]
-        [ProducesResponseType<TipoAluno>(StatusCodes.Status200OK)]
+        [ProducesResponseType<StudentTypeResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
-        {
-            var tipo = await this._context.TipoAlunos
-                .AsNoTracking()
-                .FirstOrDefaultAsync(t => t.Id == id);
-
-            if (tipo == null)
-                return NotFound(new { message = $"Nenhum tipo de aluno encontrado com o ID {id}." });
-
-            return Ok(tipo);
-        }
+            => Ok(await this._studentTypeFacade.GetById.ExecuteAsync(id));
 
         [HttpPost]
-        [ProducesResponseType<TipoAluno>(StatusCodes.Status201Created)]
+        [ProducesResponseType<StudentTypeResponse>(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateAsync([FromBody] TipoAluno tipo)
+        public async Task<IActionResult> CreateAsync([FromBody] StudentTypeRequest request)
         {
-            await _context.TipoAlunos.AddAsync(tipo);
-            await _context.SaveChangesAsync();
+            var tipoAluno = await this._studentTypeFacade.Register.ExecuteAsync(request);
 
-            return CreatedAtRoute("GetStudentTypeById", new { id = tipo.Id }, tipo);
+            return CreatedAtRoute("GetStudentTypeById", new { id = tipoAluno.Id }, tipoAluno);
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] StudentTypeRequest request)
+        {
+            await this._studentTypeFacade.Update.ExecuteAsync(id, request);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteAsync([FromRoute] int id)
+        {
+            await this._studentTypeFacade.Delete.ExecuteAsync(id);
+
+            return NoContent();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using Kaloom.API.Context;
+﻿using Kaloom.API.Context;
 using Kaloom.Exceptions.ExceptionsBase;
 
 namespace Kaloom.API.UseCases.Fatecs.Delete

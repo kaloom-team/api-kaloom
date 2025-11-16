@@ -1,15 +1,14 @@
 ﻿namespace Kaloom.Communication.DTOs.Responses
 {
-    public class StudentResponse
-    {
-        public int Id { get; set; }
-        public string Nome { get; set; } = string.Empty;
-        public string Sobrenome { get; set; } = string.Empty;
-        public string NomeUsuario { get; set; } = string.Empty;
-        public string FotoPerfil { get; set; } = string.Empty;
-        public DateOnly DataNascimento { get; set; }
-        public DateTime? DataCadastro { get; set; }
-        public int IdUsuario { get; set; }
-        public int IdTipoAluno { get; set; }
-    }
+    public sealed record StudentResponse
+    (
+        int Id,
+        string Nome,
+        string NomeUsuario,
+        string FotoPerfil,
+        DateOnly DataNascimento,
+        DateTime? DataCadastro,
+        int IdUsuario,
+        int IdTipoAluno
+    );
 }

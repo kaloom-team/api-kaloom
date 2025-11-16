@@ -1,9 +1,7 @@
-﻿using Kaloom.API.Context;
-using Kaloom.API.Models;
-using Microsoft.EntityFrameworkCore;
-using Kaloom.Exceptions.ExceptionsBase;
+﻿using AutoMapper;
+using Kaloom.API.Context;
 using Kaloom.Communication.DTOs.Responses;
-using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace Kaloom.API.UseCases.Users.GetAll
 {

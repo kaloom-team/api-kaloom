@@ -3,14 +3,12 @@ using Kaloom.API.Factories;
 using Kaloom.API.Facades;
 using Kaloom.API.Filters;
 
-using Kaloom.API.UseCases.Students;
 using Kaloom.API.UseCases.Students.Delete;
 using Kaloom.API.UseCases.Students.GetAll;
 using Kaloom.API.UseCases.Students.GetById;
 using Kaloom.API.UseCases.Students.Register;
 using Kaloom.API.UseCases.Students.Update;
 
-using Kaloom.API.UseCases.Users;
 using Kaloom.API.UseCases.Users.Delete;
 using Kaloom.API.UseCases.Users.GetAll;
 using Kaloom.API.UseCases.Users.GetById;
@@ -31,6 +29,11 @@ using Kaloom.API.UseCases.Fatecs.Update;
 using Kaloom.API.UseCases.Fatecs.Delete;
 
 using Microsoft.EntityFrameworkCore;
+using Kaloom.API.UseCases.StudentsTypes.Register;
+using Kaloom.API.UseCases.StudentsTypes.GetAll;
+using Kaloom.API.UseCases.StudentsTypes.GetById;
+using Kaloom.API.UseCases.StudentsTypes.Delete;
+using Kaloom.API.UseCases.StudentsTypes.Update;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -58,16 +61,25 @@ builder.Services.AddControllers();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
-builder.Services.AddScoped<IStudentsUseCases, StudentsUseCases>();
+builder.Services.AddScoped<IStudentFacade, StudentFacade>();
 builder.Services.AddScoped<IRegisterStudentUseCase, RegisterStudentUseCase>();
 builder.Services.AddScoped<IGetAllStudentsUseCase, GetAllStudentsUseCase>();
 builder.Services.AddScoped<IGetStudentByIdUseCase, GetStudentByIdUseCase>();
 builder.Services.AddScoped<IDeleteStudentUseCase, DeleteStudentUseCase>();
 builder.Services.AddScoped<IUpdateStudentUseCase, UpdateStudentUseCase>();
 
+builder.Services.AddScoped<IStudentTypeFacade, StudentTypeFacade>();
+builder.Services.AddScoped<IRegisterStudentTypeUseCase, RegisterStudentTypeUseCase>();
+builder.Services.AddScoped<IGetAllStudentsTypesUseCase, GetAllStudentsTypesUseCase>();
+builder.Services.AddScoped<IGetStudentTypeByIdUseCase, GetStudentTypeByIdUseCase>();
+builder.Services.AddScoped<IDeleteStudentTypeUseCase, DeleteStudentTypeUseCase>();
+builder.Services.AddScoped<IUpdateStudentTypeUseCase, UpdateStudentTypeUseCase>();
+
+builder.Services.AddScoped<IStudentTypeFactory, StudentTypeFactory>();
+builder.Services.AddScoped<IStudentTypeResponseFactory, StudentTypeResponseFactory>();
 builder.Services.AddScoped<IStudentShortFactory, StudentShortFactory>();
 
-builder.Services.AddScoped<IUsersUseCases, UsersUseCases>();
+builder.Services.AddScoped<IUserFacade, UserFacade>();
 builder.Services.AddScoped<IGetAllUsersUseCase, GetAllUsersUseCase>();
 builder.Services.AddScoped<IGetUserByIdUseCase, GetUserByIdUseCase>();
 builder.Services.AddScoped<IRegisterUserUseCase, RegisterUserUseCase>();

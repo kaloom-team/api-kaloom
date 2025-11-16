@@ -1,5 +1,4 @@
 ﻿using Kaloom.API.Context;
-using Kaloom.Communication.DTOs.Requests;
 using Kaloom.Exceptions.ExceptionsBase;
 
 namespace Kaloom.API.UseCases.Users.Delete

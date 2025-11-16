@@ -1,5 +1,4 @@
-﻿using Kaloom.API.Models;
-using Kaloom.Communication.DTOs.Responses;
+﻿using Kaloom.Communication.DTOs.Responses;
 
 namespace Kaloom.API.UseCases.Users.GetAll
 {

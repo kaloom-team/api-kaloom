@@ -27,12 +27,4 @@
     <ProjectReference Include="..\Kaloom.Exceptions\Kaloom.Exceptions.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UseCases\StudentsTypes\Delete\" />
-    <Folder Include="UseCases\StudentsTypes\GetAll\" />
-    <Folder Include="UseCases\StudentsTypes\GetById\" />
-    <Folder Include="UseCases\StudentsTypes\Register\" />
-    <Folder Include="UseCases\StudentsTypes\Update\" />
-  </ItemGroup>
-
 </Project>

@@ -2,7 +2,7 @@
 [![Status do Projeto](https://img.shields.io/badge/status-In%20Development-yellow)]()
 [![GitHub last commit](https://img.shields.io/github/last-commit/kaloom-team/api-kaloom)]()
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Versão](https://img.shields.io/badge/version-v0.1.0--alpha.1-blue)]()
+[![Versão](https://img.shields.io/badge/version-v0.2.0--alpha.1-blue)]()
 
 
 [![CSharp](https://img.shields.io/badge/C%23-darkgreen?style=for-the-badge&logo=csharp)]()
@@ -31,9 +31,13 @@ O projeto combina as arquiteturas **MVC** do ASP.NET e **Layered Architecture** 
 * **API Layer (MVC)**: contém **Controllers** que expõem endpoints e **Models** que representam as entidades de domínio;
 * **Communication Layer**: gerencia os **DTOs (Data Transfer Objects)** e comunicação;
 * **Exceptions Layer**: centraliza o controle e padronização de erros.
+* **Tests Layer**: testes unitários e mocks para testar endpoints.
 
 Camadas da API:
 * **UseCases**: casos de uso de cada entidade usada nos endpoints;
+* **Facades**: facades para agregar casos de uso das controllers;
+* **Factories**: fabricas de DTOs e Models;
+* **Mappings**: profiles personalizados para mapear objetos;
 * **SharedValidator**: utiliza **FluentValidation** para validações das requests, garantindo a integridade dos dados de entrada.
 
 Essa combinação de **Layered + MVC** permite separar responsabilidades de forma clara, facilitando manutenção, testes e evolução do código.
@@ -81,8 +85,24 @@ Essa combinação de **Layered + MVC** permite separar responsabilidades de form
         <td>Biblioteca para validações de dados recebidos na API.</td>
       </tr>
       <tr>
+        <td>🔁 Mapper</td>
+        <td>AutoMapper</td>
+        <td>Mapeador objeto-objeto baseado em convenções para mapear DTOs.</td>
+      </tr>
+      <tr>
+        <td>🧪 Testes unitários</td>
+        <td>xUnit.net</td>
+        <td>Ferramenta de teste de unidade gratuita e de código aberto para .NET.</td>
+      </tr>
+      </tr>
+        <tr>
+        <td>🎭 Mock</td>
+        <td>Moq</td>
+        <td>Biblioteca de mocking .NET, usada para criar objetos simulados de dependências, permitindo testar unidades de código isoladamente.</td>
+      </tr>
+      <tr>
         <td>🧰 IDE usada e recomendada</td>
-        <td>Visual Studio 2022</td>
+        <td>Visual Studio 2026</td>
         <td>Ambiente de Desenvolvimento Integrado mais abrangente para desenvolvimento .NET.</td>
       </tr>
       <tr>
@@ -202,10 +222,32 @@ As entidades Aluno, Usuario, TipoAluno, Etec e Fatec tem os seguintes endpoints 
                 POST
             </th>
             <th>
-                /api/entidades
+                /api/entidade
             </th>
             <th>
                 Cria um novo registro
+            </th>
+        </tr>
+         <tr>
+            <th>
+                PUT
+            </th>
+            <th>
+                /api/entidade/{id}
+            </th>
+            <th>
+                Atualiza um registro
+            </th>
+        </tr>
+        <tr>
+            <th>
+                DELETE
+            </th>
+            <th>
+                /api/entidade/{id}
+            </th>
+            <th>
+                Deleta um registro
             </th>
         </tr>
     </tread>

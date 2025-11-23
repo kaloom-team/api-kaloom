@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Kaloom.API.Models;
+using Kaloom.Domain.Models;
 using Kaloom.Communication.DTOs.Requests;
 using Kaloom.Communication.DTOs.Responses;
 

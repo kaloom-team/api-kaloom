@@ -1,20 +1,13 @@
 ﻿using Kaloom.API.Controllers;
-using Kaloom.API.Facades;
-using Kaloom.API.UseCases.Students;
-using Kaloom.API.UseCases.Students.GetAll;
-using Kaloom.API.UseCases.Students.GetById;
-using Kaloom.Communication.DTOs.Requests;
+using Kaloom.Application.Facades;
+using Kaloom.Application.UseCases.Students.GetAll;
+using Kaloom.Application.UseCases.Students.GetById;
 using Kaloom.Communication.DTOs.Responses;
+using Kaloom.Exceptions.ExceptionsBase;
 using Kaloom.Tests.MockData;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Kaloom.Tests.Controllers
 {
@@ -78,8 +71,27 @@ namespace Kaloom.Tests.Controllers
             Assert.Equal((int)HttpStatusCode.OK, resultOk.StatusCode);
         }
 
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public async Task GetStudentByIdAsync_ShouldReturns404Status(int id)
+        {
+            var getByIdMock = new Mock<IGetStudentByIdUseCase>();
+
+            getByIdMock.Setup(_ => _.ExecuteAsync(id))
+                .ThrowsAsync(new NotFoundException($"Aluno com ID {id} não encontrado."));
+
+            _mockFacade.SetupGet(f => f.GetById)
+                .Returns(getByIdMock.Object);
+
+            var exception = await Assert.ThrowsAsync<NotFoundException>(() => _controller.GetByIdAsync(id));
+
+            Assert.Equal($"Aluno com ID {id} não encontrado.", exception.Message);
+        }
+
         [Fact]
-        public async Task RegisterAsync_ReturnsCreatedResult_WithStudentResponse()
+        public async Task RegisterStudentAsync_ReturnsCreatedResult_WithStudentResponse()
         {
             var request = AlunoMockData.RegisterRequest();
             _mockFacade.Setup(f => f.Register.ExecuteAsync(request))
@@ -94,7 +106,7 @@ namespace Kaloom.Tests.Controllers
         }
 
         [Fact]
-        public async Task UpdateAsync_ReturnsNoContent()
+        public async Task UpdateStudentAsync_ReturnsNoContent()
         {
             var request = AlunoMockData.UpdateRequest("First name", "Last name");
 
@@ -107,7 +119,7 @@ namespace Kaloom.Tests.Controllers
         }
 
         [Fact]
-        public async Task DeleteAsync_ReturnsNoContent()
+        public async Task DeleteStudentAsync_ReturnsNoContent()
         {
             _mockFacade.Setup(f => f.Delete.ExecuteAsync(1))
                        .Returns(Task.CompletedTask);

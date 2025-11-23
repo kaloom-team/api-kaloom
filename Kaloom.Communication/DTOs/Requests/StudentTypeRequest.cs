@@ -1,4 +1,4 @@
-﻿using Kaloom.Communication.Enums;
+﻿using Kaloom.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Kaloom.Communication.DTOs.Requests

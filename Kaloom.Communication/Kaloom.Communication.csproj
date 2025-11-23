@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Kaloom.Domain\Kaloom.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

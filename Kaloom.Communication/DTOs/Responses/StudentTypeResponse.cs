@@ -1,4 +1,4 @@
-using Kaloom.Communication.Enums;
+using Kaloom.Domain.Enums;
 
 namespace Kaloom.Communication.DTOs.Responses
 {

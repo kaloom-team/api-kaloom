@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="AutoMapper" Version="15.1.0" />
     <PackageReference Include="FluentValidation" Version="12.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
@@ -23,8 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kaloom.Application\Kaloom.Application.csproj" />
     <ProjectReference Include="..\Kaloom.Communication\Kaloom.Communication.csproj" />
+    <ProjectReference Include="..\Kaloom.Domain\Kaloom.Domain.csproj" />
     <ProjectReference Include="..\Kaloom.Exceptions\Kaloom.Exceptions.csproj" />
+    <ProjectReference Include="..\Kaloom.Infrastructure\Kaloom.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

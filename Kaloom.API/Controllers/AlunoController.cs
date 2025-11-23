@@ -1,7 +1,7 @@
 ﻿using Kaloom.Communication.DTOs.Requests;
 using Kaloom.Communication.DTOs.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Kaloom.API.Facades;
+using Kaloom.Application.Facades;
 
 namespace Kaloom.API.Controllers
 {

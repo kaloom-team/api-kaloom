@@ -18,9 +18,14 @@ namespace Kaloom.API.Services
         }
         public async Task<ExternalAuthData> ValidateAsync(string code)
         {
-            var clientId = _config["GoogleAuth:ClientId"];
-            var clientSecret = _config["GoogleAuth:ClientSecret"];
-            var redirectUri = _config["GoogleAuth:RedirectUri"];
+            var clientId = this._config["GoogleAuth:ClientId"] 
+                ?? throw new Exception("Google ClientId ausente");
+
+            var clientSecret = this._config["GoogleAuth:ClientSecret"] 
+                ?? throw new Exception("Google ClientSecret ausente");
+
+            var redirectUri = this._config["GoogleAuth:RedirectUri"] 
+                ?? throw new Exception("Google RedirectUri ausente");
 
             var content = new FormUrlEncodedContent(new[]
             {

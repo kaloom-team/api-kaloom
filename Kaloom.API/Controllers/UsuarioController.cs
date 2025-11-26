@@ -85,5 +85,13 @@ namespace Kaloom.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> LoginGoogleAsync([FromBody] GoogleLoginRequest request)
             => Ok(await this._userFacade.LoginGoogle.ExecuteAsync(request));
+
+        [HttpPost("LoginGithub")]
+        [AllowAnonymous]
+        [ProducesResponseType<UserLoginResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> LoginGithubAsync([FromBody] GithubLoginRequest request)
+            => Ok(await this._userFacade.LoginGithub.ExecuteAsync(request));
     }
 }

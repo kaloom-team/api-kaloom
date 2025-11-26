@@ -54,11 +54,13 @@ builder.Services.AddAuthorization();
 builder.Services.AddApplication();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IGoogleAuthService, GoogleAuthService>();
+builder.Services.AddScoped<IGithubAuthService, GithubAuthService>();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddAutoMapper();
 builder.Services.AddRepositories();
 
 builder.Services.AddHttpClient<IGoogleAuthService, GoogleAuthService>();
+builder.Services.AddHttpClient<IGithubAuthService, GithubAuthService>();
 
 
 builder.Services.AddControllers();

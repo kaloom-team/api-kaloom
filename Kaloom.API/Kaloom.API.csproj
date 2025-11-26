@@ -4,11 +4,14 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>5fdeab66-18d6-4ecc-a9f8-86cd1313b62c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="15.1.0" />
     <PackageReference Include="FluentValidation" Version="12.1.0" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.73.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,6 +23,7 @@
     </PackageReference>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>

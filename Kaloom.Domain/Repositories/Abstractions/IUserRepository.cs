@@ -9,5 +9,6 @@ namespace Kaloom.Domain.Repositories.Abstractions
         public Task AddAsync(Usuario entity);
         public Task DeleteAsync(Usuario entity);
         public Task UpdateAsync(Usuario entity);
+        public Task<Usuario?> GetByEmailAsync(string email);
     }
 }

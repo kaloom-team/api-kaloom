@@ -2,7 +2,7 @@
 [![Status do Projeto](https://img.shields.io/badge/status-In%20Development-yellow)]()
 [![GitHub last commit](https://img.shields.io/github/last-commit/kaloom-team/api-kaloom)]()
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Versão](https://img.shields.io/badge/version-v0.2.0--alpha.1-blue)]()
+[![Versão](https://img.shields.io/badge/version-v0.2.0--alpha.2-blue)]()
 
 
 [![CSharp](https://img.shields.io/badge/C%23-darkgreen?style=for-the-badge&logo=csharp)]()
@@ -14,7 +14,7 @@
 
 
 Esse projeto é uma **Application Programming Interface** (API) em desenvolvimento da rede social **Kaloom** para acesso e persistência de dados de alunos, usuários e intituições Etecs e Fatecs em **MySQL**, desenvolvida em **C#** com **.NET**, **ASP.NET Core**, **Entity Framework Core** e **FluentValidation**.
-O projeto combina as arquiteturas **MVC** do ASP.NET e **Layered Architecture** para manter uma estrutura limpa, organizada e escalável, contendo Controllers, Models, DTOs, validações, comunicação entre camadas, tratamento de exceções costumizadas e respostas padronizadas.
+O projeto combina elementos da arquitetura **MVC** do ASP.NET com a **Clean Architecture** para manter uma estrutura limpa, organizada e escalável, contendo Controllers, Models, DTOs, Repositories, validações, comunicação entre camadas, tratamento de exceções costumizadas, respostas padronizadas e testes de unidade.
 
 <p>
     <strong>Indice</strong>: &nbsp;&nbsp;
@@ -28,19 +28,17 @@ O projeto combina as arquiteturas **MVC** do ASP.NET e **Layered Architecture** 
 
 <h2 id="arquiteturas"> 🏛️ Arquiteturas e responsabilidades </h2>
 
-* **API Layer (MVC)**: contém **Controllers** que expõem endpoints e **Models** que representam as entidades de domínio;
-* **Communication Layer**: gerencia os **DTOs (Data Transfer Objects)** e comunicação;
-* **Exceptions Layer**: centraliza o controle e padronização de erros.
-* **Tests Layer**: testes unitários e mocks para testar endpoints.
+Camadas da **Clean Architecture**:
 
-Camadas da API:
-* **UseCases**: casos de uso de cada entidade usada nos endpoints;
-* **Facades**: facades para agregar casos de uso das controllers;
-* **Factories**: fabricas de DTOs e Models;
-* **Mappings**: profiles personalizados para mapear objetos;
-* **SharedValidator**: utiliza **FluentValidation** para validações das requests, garantindo a integridade dos dados de entrada.
+* **API**: contém **Controllers** que expõem endpoints e **Filters** que filtram erros;
+* **Application**: contém **casos de uso**, **SharedValidator** para validações compartilhadas do **FluentValidation**, **Factories** para fabricar DTOs, **Facades** para agregar use cases e profiles de mapeamento do AutoMapper;
+* **Communication**: gerencia os **DTOs (Data Transfer Objects)** e comunicação;
+* **Domain**: contém **Models**, **Enums** e abstrações de **repositórios**;
+* **Infrastructure**: contém implementação de **Repositórios** para a camada de acesso a dados, **Context** do banco de dados, **Migrations**, configurações e seeds;
+* **Exceptions**: centraliza o controle e padronização de erros.
+* **Tests**: testes unitários e mocks para testar endpoints.
 
-Essa combinação de **Layered + MVC** permite separar responsabilidades de forma clara, facilitando manutenção, testes e evolução do código.
+Essa arquitetura permite separar responsabilidades de forma clara, facilitando manutenção, testes e evolução do código.
 
 <h2 id="tecnologias"> 🛠️ Tecnologias e Ferramentas Utilizadas </h2>
 
@@ -155,11 +153,11 @@ Essa combinação de **Layered + MVC** permite separar responsabilidades de form
 6. **Execute as migrations**
 
    ```bash
-   dotnet ef database update --project Kaloom.API
+   dotnet ef database update --project Kaloom.Infrastructure
    ```
    ou
    ```bash
-   cd Kaloom.API
+   cd Kaloom.Infrastructure
    dotnet ef database update
    ```
 

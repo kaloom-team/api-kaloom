@@ -36,5 +36,11 @@ namespace Kaloom.Infrastructure.Repositories
         {
             await this._userRepository.DeleteAsync(entity);
         }
+
+        public async Task<Usuario?> GetByEmailAsync(string email)
+        {
+            return await _userRepository.GetByReferenceIdAsync(u => u.Email == email);
+        }
+
     }
 }

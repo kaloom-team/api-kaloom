@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Kaloom.Application.Services;
 using Kaloom.Communication.DTOs.Requests;
 using Kaloom.Communication.DTOs.Responses;
 using Kaloom.Domain.Repositories.Abstractions;
@@ -12,14 +13,18 @@ namespace Kaloom.Application.UseCases.Users.Login
         private readonly IUserRepository _userRepository;
         private readonly IStudentRepository _studentRepository;
         private readonly IMapper _mapper;
+        private readonly IJwtTokenGenerator _tokenGenerator;
+
         public UserLoginUseCase(
             IUserRepository userRepository, 
             IStudentRepository studentRepository,
-            IMapper mapper)
+            IMapper mapper,
+            IJwtTokenGenerator tokenGenerator)
         {
             this._userRepository = userRepository;
             this._studentRepository = studentRepository;
             this._mapper = mapper;
+            this._tokenGenerator = tokenGenerator;
         }
         public async Task<UserLoginResponse> ExecuteAsync(UserRequest request)
         {
@@ -41,7 +46,13 @@ namespace Kaloom.Application.UseCases.Users.Login
                     a => a.TipoAluno)
                 ?? throw new NotFoundException("Aluno não encontrado para este usuário.");
 
-            return new UserLoginResponse("Login realizado com sucesso!", _mapper.Map<StudentResponse>(aluno));
+            var token = _tokenGenerator.GenerateToken(user.Id, user.Email);
+
+            return new UserLoginResponse(
+                msg: "Login realizado com sucesso!", 
+                student: this._mapper.Map<StudentResponse>(aluno),
+                token: token
+            );
         }
     }
 }

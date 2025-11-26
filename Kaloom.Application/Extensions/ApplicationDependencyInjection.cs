@@ -25,6 +25,7 @@ using Kaloom.Application.UseCases.Users.Delete;
 using Kaloom.Application.UseCases.Users.GetAll;
 using Kaloom.Application.UseCases.Users.GetById;
 using Kaloom.Application.UseCases.Users.Login;
+using Kaloom.Application.UseCases.Users.LoginGoogle;
 using Kaloom.Application.UseCases.Users.Register;
 using Kaloom.Application.UseCases.Users.Update;
 using Microsoft.Extensions.DependencyInjection;
@@ -73,6 +74,7 @@ namespace Kaloom.Application.Extensions
             services.AddScoped<IUpdateUserUseCase, UpdateUserUseCase>();
             services.AddScoped<IDeleteUserUseCase, DeleteUserUseCase>();
             services.AddScoped<IUserLoginUseCase, UserLoginUseCase>();
+            services.AddScoped<ILoginGoogleUseCase, LoginGoogleUseCase>();
 
             services.AddScoped<IUserFacade, UserFacade>();
 

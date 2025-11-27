@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="15.1.0" />
+    <PackageReference Include="FluentValidation" Version="12.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Kaloom.SharedContracts\Kaloom.SharedContracts.csproj" />
+    <ProjectReference Include="..\Kaloom.Users.Communication\Kaloom.Users.Communication.csproj" />
+    <ProjectReference Include="..\Kaloom.Users.Domain\Kaloom.Users.Domain.csproj" />
+    <ProjectReference Include="..\Kaloom.Users.Exceptions\Kaloom.Users.Exceptions.csproj" />
+  </ItemGroup>
+
+</Project>

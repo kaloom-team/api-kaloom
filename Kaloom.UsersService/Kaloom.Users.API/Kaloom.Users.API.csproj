@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Apis.Auth" Version="1.73.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.22" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kaloom.Users.Application\Kaloom.Users.Application.csproj" />
+    <ProjectReference Include="..\Kaloom.Users.Communication\Kaloom.Users.Communication.csproj" />
+    <ProjectReference Include="..\Kaloom.Users.Domain\Kaloom.Users.Domain.csproj" />
+    <ProjectReference Include="..\Kaloom.Users.Exceptions\Kaloom.Users.Exceptions.csproj" />
+    <ProjectReference Include="..\Kaloom.Users.Infrastructure\Kaloom.Users.Infrastructure.csproj" />
+  </ItemGroup>
+	
+</Project>

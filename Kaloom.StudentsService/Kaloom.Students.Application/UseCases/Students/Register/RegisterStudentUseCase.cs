@@ -28,10 +28,7 @@ namespace Kaloom.Students.Application.UseCases.Students.Register
 
             var alunos = await this._studentRepository.GetAllAsync();
 
-            if (alunos.Any(e => e.NomeUsuario.ToLower() == request.NomeUsuario.ToLower() && e.Id != request.Id))
-            {
-                throw new ErrorOnValidationException("Nome de usuário já em uso.");
-            }
+
 
             var aluno = this._mapper.Map<Aluno>(request);
 

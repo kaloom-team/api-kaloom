@@ -20,7 +20,11 @@ namespace Kaloom.Users.Application.UseCases.Users.GetById
             return new UserResponse
             (
                 usuario.Id,
-                usuario.Email
+                usuario.Email,
+                usuario.NomeUsuario,
+                usuario.FotoPerfil,
+                usuario.FotoCapa,
+                usuario.Biografia
             );
         }
     }

@@ -2,7 +2,9 @@
 using Kaloom.Students.Application.Facades;
 using Kaloom.Students.Communication.DTOs.Requests;
 using Kaloom.Students.Communication.DTOs.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Kaloom.Students.API.Controllers
 {
@@ -38,6 +40,7 @@ namespace Kaloom.Students.API.Controllers
         public async Task<IActionResult> GetByUserIdAsync([FromRoute] int id)
             => Ok(await this._studentFacade.GetByReferenceId.ExecuteAsync(id));
 
+
         [HttpPost]
         [ProducesResponseType<StudentShortResponse>(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -70,5 +73,26 @@ namespace Kaloom.Students.API.Controllers
 
             return NoContent();
         }
+
+        [Authorize]
+        [HttpGet("me")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Me()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var user = await this._studentFacade.GetByReferenceId.ExecuteAsync(Convert.ToInt32(userId));
+
+            if (user is null)
+                return NotFound();
+
+            return Ok(user);
+        }
+
     }
 }

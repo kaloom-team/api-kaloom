@@ -75,7 +75,7 @@ namespace Kaloom.Users.API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> LoginAsync([FromBody] UserRequest request)
+        public async Task<IActionResult> LoginAsync([FromBody] UserLoginRequest request)
             => Ok(await this._userFacade.Login.ExecuteAsync(request));
 
         [HttpPost("LoginGoogle")]

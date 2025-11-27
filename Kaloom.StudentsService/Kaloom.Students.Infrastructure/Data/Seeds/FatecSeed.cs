@@ -10,17 +10,17 @@ namespace Kaloom.Students.Infrastructure.Data.Seeds
             modelBuilder.Entity<Fatec>().HasData(
                new Fatec
                {
-                   Id = 1,
+                   Id = 6,
                    NomeUnidade = "Fatec Diadema - \"Luigi Papaiz\""
                },
                new Fatec
                {
-                   Id = 2,
+                   Id = 7,
                    NomeUnidade = "Fatec SBC - \"Adib Moisés Dib\""
                },
                new Fatec
                {
-                   Id = 3,
+                   Id = 8,
                    NomeUnidade = "Fatec São Paulo"
                }
             );

@@ -27,11 +27,6 @@ namespace Kaloom.Students.Application.UseCases.Students.SharedValidator
                 .NotNull()
                 .WithMessage("O sobrenome é obrigatório, não pode ser vazio ou conter apenas espaços.");
 
-            RuleFor(student => student.NomeUsuario)
-                .NotEmpty()
-                .NotNull()
-                .WithMessage("O nome de usuário é obrigatório, não pode ser vazio ou conter apenas espaços.");
-
             RuleFor(student => student.DataNascimento)
                 .NotEmpty().WithMessage("A data de nascimento é obrigatória, não pode ser vazio ou conter apenas espaços.")
                 .NotNull().WithMessage("A data de nascimento é obrigatória, não pode ser vazio ou conter apenas espaços.")

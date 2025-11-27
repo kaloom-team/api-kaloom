@@ -18,7 +18,6 @@ namespace Kaloom.Students.Application.Consumers
                 Nome = userEvent.GivenName,
                 Sobrenome = userEvent.FamilyName,
                 IdUsuario = userEvent.UserId,
-                NomeUsuario = (userEvent.GivenName + userEvent.FamilyName).Replace(" ", "").ToLower(),
                 DataCadastro = DateTime.Now,
                 IdTipoAluno = 1,
                 TipoAluno = null,

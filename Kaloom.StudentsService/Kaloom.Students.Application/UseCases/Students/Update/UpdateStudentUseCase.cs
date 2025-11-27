@@ -21,14 +21,10 @@ namespace Kaloom.Students.Application.UseCases.Students.Update
 
             var alunos = await this._studentRepository.GetAllAsync();
 
-            if (alunos.Any(e => e.NomeUsuario.ToLower() == request.NomeUsuario.ToLower() && e.Id != id))
-            {
-                throw new ErrorOnValidationException("Nome de usuário já em uso.");
-            }
+            
 
             aluno.Nome = request.Nome;
             aluno.Sobrenome = request.Sobrenome;
-            aluno.NomeUsuario = request.NomeUsuario;
             aluno.DataNascimento = request.DataNascimento;
 
             await this._studentRepository.UpdateAsync(aluno);

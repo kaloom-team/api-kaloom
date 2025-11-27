@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UseCases\Students\GetByReferenceIdWithIncludes\**" />
+    <EmbeddedResource Remove="UseCases\Students\GetByReferenceIdWithIncludes\**" />
+    <None Remove="UseCases\Students\GetByReferenceIdWithIncludes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="15.1.0" />
     <PackageReference Include="FluentValidation" Version="12.1.0" />
   </ItemGroup>

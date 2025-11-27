@@ -6,8 +6,6 @@ namespace Kaloom.Students.Domain.Models
     {
         public string Nome { get; set; } = string.Empty;
         public string Sobrenome { get; set; } = string.Empty;
-        public string NomeUsuario { get; set; } = string.Empty;
-        public string? FotoPerfil { get; set; } = string.Empty;
         public DateOnly DataNascimento { get; set; }
         public DateTime DataCadastro { get; set; }
 
@@ -15,5 +13,7 @@ namespace Kaloom.Students.Domain.Models
 
         public int IdTipoAluno { get; set; }
         public required TipoAluno TipoAluno { get; set; }
+        public List<Instituicao> Instituicoes { get; set; } = new();
+
     }
 }

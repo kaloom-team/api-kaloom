@@ -5,6 +5,6 @@ namespace Kaloom.Users.Application.UseCases.Users.Login
 {
     public interface IUserLoginUseCase
     {
-        public Task<UserLoginResponse> ExecuteAsync(UserRequest request);
+        public Task<UserLoginResponse> ExecuteAsync(UserLoginRequest request);
     }
 }

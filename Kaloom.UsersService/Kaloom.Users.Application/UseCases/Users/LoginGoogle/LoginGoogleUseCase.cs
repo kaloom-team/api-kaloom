@@ -38,7 +38,7 @@ namespace Kaloom.Users.Application.UseCases.Users.LoginGoogle
 
             var user = await this._userRepository.GetByEmailAsync(payload.Email);
 
-            if (user != null && user.Senha != null && !user.Senha.StartsWith("GOOGLE-"))
+            if (user != null && user.Senha != null && !user.Senha.StartsWith("GOOGLE-") && !user.Senha.StartsWith("GITHUB-"))
                 throw new ErrorOnValidationException("Este email já está em uso em uma conta tradicional.");
 
             if (user == null)
@@ -48,6 +48,10 @@ namespace Kaloom.Users.Application.UseCases.Users.LoginGoogle
                 {
                     Email = payload.Email,
                     Senha = $"GOOGLE-{Guid.NewGuid()}",
+                    NomeUsuario = (payload.GivenName + payload.FamilyName).Replace(" ", "").ToLower(),
+                    FotoPerfil = payload.Picture ?? string.Empty,
+                    FotoCapa = string.Empty,
+                    Biografia = string.Empty
                 };
 
                 await this._userRepository.AddAsync(user);

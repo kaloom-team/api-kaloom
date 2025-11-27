@@ -39,7 +39,7 @@ namespace Kaloom.Users.Application.UseCases.Users.LoginGithub
 
             var user = await this._userRepository.GetByEmailAsync(payload.Email);
 
-            if (user != null && user.Senha != null && !user.Senha.StartsWith("GITHUB-"))
+            if (user != null && user.Senha != null && !user.Senha.StartsWith("GITHUB-") && !user.Senha.StartsWith("GOOGLE-"))
                 throw new ErrorOnValidationException("Este email já está em uso em uma conta tradicional.");
 
             if (user == null)
@@ -49,6 +49,10 @@ namespace Kaloom.Users.Application.UseCases.Users.LoginGithub
                 {
                     Email = payload.Email,
                     Senha = $"GITHUB-{Guid.NewGuid()}",
+                    NomeUsuario = (payload.GivenName + payload.FamilyName).Replace(" ", "").ToLower(),
+                    FotoPerfil = payload.Picture ?? string.Empty,
+                    FotoCapa = string.Empty,
+                    Biografia = string.Empty
                 };
 
 

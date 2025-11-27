@@ -1,6 +1,7 @@
 ﻿using Kaloom.Students.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 namespace Kaloom.Students.Infrastructure.Data.Configurations
 {
@@ -9,6 +10,11 @@ namespace Kaloom.Students.Infrastructure.Data.Configurations
         public void Configure(EntityTypeBuilder<Aluno> builder)
         {
             builder
+                .HasMany(a => a.Instituicoes)
+                .WithMany(i => i.Alunos)
+                .UsingEntity(j => j.ToTable("AlunoInstituicoes"));
+
+            builder
                 .Property(a => a.Nome)
                 .HasColumnType("varchar(16)");
 
@@ -16,9 +22,7 @@ namespace Kaloom.Students.Infrastructure.Data.Configurations
                 .Property(a => a.Sobrenome)
                 .HasColumnType("varchar(24)");
 
-            builder
-                .Property(a => a.NomeUsuario)
-                .HasColumnType("varchar(24)");
+            
 
 
             builder

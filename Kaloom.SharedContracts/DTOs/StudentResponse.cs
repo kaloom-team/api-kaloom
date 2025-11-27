@@ -4,8 +4,7 @@
     {
         public int Id { get; init; }
         public string Nome { get; init; }
-        public string NomeUsuario { get; init; }
-        public string FotoPerfil { get; init; }
+        public string Sobrenome { get; init; }
         public DateOnly DataNascimento { get; init; }
         public DateTime? DataCadastro { get; init; }
         public int IdUsuario { get; init; }
@@ -17,8 +16,7 @@
         public StudentResponse(
             int Id,
             string Nome,
-            string NomeUsuario,
-            string FotoPerfil,
+            string Sobrenome,
             DateOnly DataNascimento,
             DateTime? DataCadastro,
             int IdUsuario,
@@ -27,8 +25,7 @@
         {
             this.Id = Id;
             this.Nome = Nome;
-            this.NomeUsuario = NomeUsuario;
-            this.FotoPerfil = FotoPerfil;
+            this.Sobrenome = Sobrenome;
             this.DataNascimento = DataNascimento;
             this.DataCadastro = DataCadastro;
             this.IdUsuario = IdUsuario;

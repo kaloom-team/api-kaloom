@@ -24,6 +24,11 @@ namespace Kaloom.Users.Application.UseCases.Users.Update
                 throw new ErrorOnValidationException("Email já cadastrado.");
             }
 
+            if (users.Any(e => e.NomeUsuario.ToLower() == request.NomeUsuario.ToLower() && e.Id != id))
+            {
+                throw new ErrorOnValidationException("Nome de usuário já em uso.");
+            }
+
             var usuario = await this._userRepository.GetByIdAsync(id)
                 ?? throw new NotFoundException($"Usuario com ID {id} não encontrado.");
 

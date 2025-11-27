@@ -5,7 +5,7 @@ using Kaloom.Users.Communication.DTOs.Requests;
 using Kaloom.Users.Communication.DTOs.Responses;
 using Kaloom.Users.Domain.Repositories.Abstractions;
 using Kaloom.Users.Exceptions.ExceptionsBase;
-using static Kaloom.Users.Application.UseCases.Users.Utils.UserValidate;
+using static Kaloom.Users.Application.UseCases.Users.Utils.UserLoginValidate;
 
 namespace Kaloom.Users.Application.UseCases.Users.Login
 {
@@ -31,7 +31,7 @@ namespace Kaloom.Users.Application.UseCases.Users.Login
             this._eventPublisher = eventPublisher;
             this._studentDataClient = studentDataClient;
         }
-        public async Task<UserLoginResponse> ExecuteAsync(UserRequest request)
+        public async Task<UserLoginResponse> ExecuteAsync(UserLoginRequest request)
         {
             Validate(request);
 

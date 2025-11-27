@@ -30,6 +30,11 @@ namespace Kaloom.Users.Application.UseCases.Users.Register
                 throw new ErrorOnValidationException("Email já cadastrado.");
             }
 
+            if (users.Any(e => e.NomeUsuario.ToLower() == request.NomeUsuario.ToLower() && e.Id != request.Id))
+            {
+                throw new ErrorOnValidationException("Nome de usuário já em uso.");
+            }
+
             var usuario = _mapper.Map<Usuario>(request);
 
             await _userRepository.AddAsync(usuario);

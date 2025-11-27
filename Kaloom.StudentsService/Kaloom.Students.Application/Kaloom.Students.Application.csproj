@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="UseCases\Students\GetByReferenceIdWithIncludes\**" />
+    <EmbeddedResource Remove="UseCases\Students\GetByReferenceIdWithIncludes\**" />
+    <None Remove="UseCases\Students\GetByReferenceIdWithIncludes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="15.1.0" />
+    <PackageReference Include="FluentValidation" Version="12.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Kaloom.SharedContracts\Kaloom.SharedContracts.csproj" />
+    <ProjectReference Include="..\Kaloom.Students.Communication\Kaloom.Students.Communication.csproj" />
+    <ProjectReference Include="..\Kaloom.Students.Domain\Kaloom.Students.Domain.csproj" />
+    <ProjectReference Include="..\Kaloom.Students.Exceptions\Kaloom.Students.Exceptions.csproj" />
+  </ItemGroup>
+
+</Project>

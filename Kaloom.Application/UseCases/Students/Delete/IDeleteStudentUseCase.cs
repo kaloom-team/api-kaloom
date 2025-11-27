@@ -1,7 +1,0 @@
-namespace Kaloom.Application.UseCases.Students.Delete
-{
-    public interface IDeleteStudentUseCase
-    {
-        public Task ExecuteAsync(int id);
-    }
-}
